@@ -28,6 +28,8 @@
   --r:16px;
 }
 html,body{background:var(--bg);color:var(--tx)}
+body::before{content:'';position:fixed;inset:0 0 auto 0;height:340px;pointer-events:none;z-index:-1;
+  background:radial-gradient(120% 100% at 50% -25%, rgba(51,163,212,.16), rgba(255,138,60,.05) 45%, transparent 70%)}
 body{
   font:16px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
   padding:0 16px calc(44px + env(safe-area-inset-bottom));
@@ -58,19 +60,40 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .card.hot{border-color:var(--or-b2)}
 .rowtop{display:flex;justify-content:space-between;align-items:center}
 
-/* macros */
-.hero{display:flex;align-items:flex-end;justify-content:space-between;margin:9px 0 11px}
-.big{font-size:36px;font-weight:800;letter-spacing:-1.4px;line-height:.95}
-.big s{text-decoration:none;font-size:13px;font-weight:600;color:var(--mu);letter-spacing:0;margin-left:6px}
+/* card head + icon chip */
+.chead{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.chead .lbl{flex:1}
+.chip{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:var(--or-w);color:var(--or);flex:0 0 auto}
+.chip.b{background:var(--blue-w);color:var(--blue)}
+.chip svg{width:14px;height:14px}
+
+/* ring */
+.ringrow{display:flex;align-items:center;gap:18px;margin:14px 0 4px}
+.ring{position:relative;width:118px;height:118px;flex:0 0 auto}
+.ring svg{width:118px;height:118px;transform:rotate(-90deg)}
+.ring .trk{fill:none;stroke:var(--card2);stroke-width:10}
+.ring .prg{fill:none;stroke:var(--or);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .45s ease}
+.ring.hit .prg{stroke:var(--blue)}
+.rc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.rc b{font-size:27px;font-weight:800;letter-spacing:-1px;line-height:1}
+.rc s{text-decoration:none;font-size:10px;font-weight:800;letter-spacing:1.3px;color:var(--mu2)}
+.ring.hit .rc b{color:var(--blue)}
+.rside{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.rstat em{display:block;font-style:normal;font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--mu2)}
+.rstat b{font-size:19px;font-weight:800;letter-spacing:-.5px}
+.rstat b span{font-size:12px;font-weight:600;color:var(--mu)}
+
+/* bars */
 .of{font-size:13.5px;font-weight:600;color:var(--mu);white-space:nowrap}
-.bar{height:8px;border-radius:8px;background:var(--card2);overflow:hidden}
-.bar i{display:block;height:100%;border-radius:8px;background:var(--or);transition:width .18s}
-.bar.b i{background:var(--blue)}
-.hr{height:1px;background:var(--line);margin:16px 0 14px}
-.sub{display:flex;align-items:baseline;justify-content:space-between;margin:8px 0 10px}
+.bar{height:9px;border-radius:9px;background:var(--card2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--or),#ffb474);transition:width .35s ease}
+.bar.b i{background:linear-gradient(90deg,var(--blue),#8ad9f5)}
+.hr{height:1px;background:var(--line);margin:18px 0 14px}
+.sub{display:flex;align-items:baseline;justify-content:space-between;margin:9px 0 10px}
 .sub b{font-size:22px;font-weight:800;letter-spacing:-.6px}
 .sub b s{text-decoration:none;font-size:12.5px;font-weight:600;color:var(--mu);margin-left:5px}
 .done{color:var(--blue)}
+.empty{font-size:13px;color:var(--mu2);font-weight:600;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);text-align:center}
 
 /* log button */
 .log{width:100%;padding:17px;border-radius:var(--r);background:var(--or);color:#0d1a13;font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:10px;transition:transform .07s}
@@ -112,10 +135,12 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .link{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.2px}
 
 /* fundamentals */
-.dots{display:flex;gap:6px;margin-top:12px}
-.dot{flex:1;height:6px;border-radius:6px;background:var(--card2)}
-.dot.on{background:var(--blue)}
+.ftiles{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:13px}
+.ft{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;background:var(--card2);border:1.5px solid var(--or-b2);color:var(--or)}
+.ft svg{width:17px;height:17px}
+.ft.on{background:var(--blue);border-color:var(--blue);color:#06141f}
 .cnt{font-size:15px;font-weight:800}
+.cnt s{text-decoration:none;color:var(--mu2);font-weight:700}
 
 /* todo */
 .todo{list-style:none;margin-top:6px}
@@ -386,6 +411,18 @@ function lastWeight(before){
 /* ================= icons ================= */
 const ICO_DROP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3.2c3.5 4.2 6 7.5 6 10.6a6 6 0 0 1-12 0c0-3.1 2.5-6.4 6-10.6z"/></svg>';
 const ICO_CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg>';
+const SV=p=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+const I={
+  cal:  SV('<path d="M13 2L4.5 13.5H11l-1 8.5 8.5-11.5H12L13 2z"/>'),
+  pro:  SV('<path d="M4 9v6M7.5 6.5v11M16.5 6.5v11M20 9v6M7.5 12h9"/>'),
+  sleep:SV('<path d="M20.5 14.7A8.6 8.6 0 1 1 9.3 3.5a6.7 6.7 0 0 0 11.2 11.2z"/>'),
+  water:SV('<path d="M12 3.2c3.5 4.2 6 7.5 6 10.6a6 6 0 0 1-12 0c0-3.1 2.5-6.4 6-10.6z"/>'),
+  supp: SV('<rect x="3" y="9" width="18" height="6.5" rx="3.25"/><path d="M12 9v6.5"/>'),
+  wt:   SV('<circle cx="12" cy="12" r="8.5"/><path d="M12 12l4-3"/>'),
+  list: SV('<path d="M8 6h12M8 12h12M8 18h12M3.6 6h.01M3.6 12h.01M3.6 18h.01"/>'),
+  star: SV('<path d="M12 3.5l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L12 17.3l-5.3 2.9 1.1-6.1L3.4 9.9l6-.8L12 3.5z"/>')
+};
+const FICO=[I.cal,I.pro,I.sleep,I.water,I.supp,I.wt];
 
 /* ================= render ================= */
 const $=s=>document.querySelector(s);
@@ -403,7 +440,9 @@ function render(){
   const dt=asDate(VIEW);
   const diff=daysBetween(VIEW,TODAY());
   $('#title').textContent = diff===0?'TODAY' : diff===1?'YESTERDAY' : dt.toLocaleDateString(undefined,{weekday:'long'}).toUpperCase();
-  $('#date').textContent = dt.toLocaleDateString(undefined,{month:'long',day:'numeric'});
+  const hr=new Date().getHours();
+  const greet = hr<12?'Good morning' : hr<18?'Good afternoon' : 'Good evening';
+  $('#date').textContent = (diff===0?greet+' · ':'') + dt.toLocaleDateString(undefined,{month:'short',day:'numeric'});
   $('#next').disabled = isToday();
 
   let h='';
@@ -414,21 +453,31 @@ function render(){
     h+=`<div class="past">Weekly review ready<button class="link" data-a="week">VIEW</button></div>`;
 
   /* macros */
+  const C=2*Math.PI*52;
+  const pct=Math.min(1,c/s.cal);
   h+=`<div class="card">
-    <div class="lbl">Calories</div>
-    <div class="hero">
-      <div class="big ${cLeft<=0?'done':''}">${nf(Math.abs(cLeft))}<s>${cLeft>0?'left':'over'}</s></div>
-      <div class="of">${nf(c)} / ${nf(s.cal)}</div>
+    <div class="chead"><i class="chip">${I.cal}</i><div class="lbl">Calories</div></div>
+    <div class="ringrow">
+      <div class="ring ${cLeft<=0?'hit':''}">
+        <svg viewBox="0 0 118 118">
+          <circle class="trk" cx="59" cy="59" r="52"/>
+          <circle class="prg" cx="59" cy="59" r="52" style="stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${(C*(1-pct)).toFixed(1)}"/>
+        </svg>
+        <div class="rc"><b>${nf(Math.abs(cLeft))}</b><s>${cLeft>0?'LEFT':'OVER'}</s></div>
+      </div>
+      <div class="rside">
+        <div class="rstat"><em>EATEN</em><b>${nf(c)} <span>cal</span></b></div>
+        <div class="rstat"><em>GOAL</em><b>${nf(s.cal)} <span>cal</span></b></div>
+      </div>
     </div>
-    <div class="bar"><i style="width:${Math.min(100,c/s.cal*100)}%"></i></div>
     <div class="hr"></div>
-    <div class="lbl">Protein</div>
+    <div class="chead"><i class="chip b">${I.pro}</i><div class="lbl">Protein</div></div>
     <div class="sub">
       <b class="${pLeft<=0?'done':''}">${nf(Math.abs(pLeft))}g<s>${pLeft>0?'left':'over'}</s></b>
       <div class="of">${nf(p)}g / ${nf(s.pro)}g</div>
     </div>
     <div class="bar b"><i style="width:${Math.min(100,p/s.pro*100)}%"></i></div>
-    ${d.e.length?entriesHTML(d):''}
+    ${d.e.length?entriesHTML(d):`<div class="empty">No meals logged yet</div>`}
   </div>`;
 
   h+=`<button class="log" data-a="meal">+ Log Meal</button>`;
@@ -448,7 +497,7 @@ function render(){
   const n=+d.cups||0, tot=cupsTotal();
   h+=`<div class="card">
     <div class="rowtop">
-      <div class="lbl">Water</div>
+      <div class="chead" style="margin:0"><i class="chip b">${I.water}</i><div class="lbl">Water</div></div>
       <div class="of ${waterDone(d)?'done':''}">${nf(waterOz(d))} / ${nf(s.water)} oz</div>
     </div>
     <div class="cups">`;
@@ -458,7 +507,7 @@ function render(){
   /* supplements */
   h+=`<div class="card">
     <div class="rowtop">
-      <div class="lbl">Supplements</div>
+      <div class="chead" style="margin:0"><i class="chip">${I.supp}</i><div class="lbl">Supplements</div></div>
       ${s.supps.length&&!suppsDone(d)?`<button class="link" data-a="suppall">MARK ALL</button>`:''}
       ${suppsDone(d)?`<div class="lbl done">All taken</div>`:''}
     </div>
@@ -470,8 +519,11 @@ function render(){
 
   /* fundamentals */
   h+=`<div class="card">
-    <div class="rowtop"><div class="lbl">Daily Fundamentals</div><div class="cnt">${nDone} / ${f.length}</div></div>
-    <div class="dots">${f.map(x=>`<i class="dot ${x.ok?'on':''}"></i>`).join('')}</div>
+    <div class="rowtop">
+      <div class="chead" style="margin:0"><i class="chip ${nDone===f.length?'b':''}">${I.star}</i><div class="lbl">Daily Fundamentals</div></div>
+      <div class="cnt">${nDone}<s> / ${f.length}</s></div>
+    </div>
+    <div class="ftiles">${f.map((x,i)=>`<i class="ft ${x.ok?'on':''}" title="${x.k}">${FICO[i]}</i>`).join('')}</div>
   </div>`;
 
   /* still to do — today only */
@@ -483,7 +535,7 @@ function render(){
     if(!suppsDone(d)) todo.push(`Take <b>${s.supps.filter(x=>!d.supps[x.id]).map(x=>esc(x.n)).join(', ')||'supplements'}</b>`);
     if(d.weight==null) todo.push(`Log <b>weight</b>`);
     if(d.sleep==null)  todo.push(`Log <b>sleep</b>`);
-    h+=`<div class="card ${todo.length?'hot':''}"><div class="lbl">Still to do</div>`;
+    h+=`<div class="card ${todo.length?'hot':''}"><div class="chead"><i class="chip ${todo.length?'':'b'}">${I.list}</i><div class="lbl">Still to do</div></div>`;
     h+= todo.length ? `<ul class="todo">${todo.map(x=>`<li>${x}</li>`).join('')}</ul>`
                     : `<div class="clear">Everything handled</div>`;
     h+=`</div>`;
@@ -494,7 +546,7 @@ function render(){
     const label={target:'GAINING AT TARGET RATE',slow:'GAINING TOO SLOWLY',high:'SLIGHTLY ABOVE TARGET',fast:'GAINING TOO QUICKLY'}[t.status];
     const col=t.status==='target'?'var(--blue)':'var(--or)';
     h+=`<div class="card">
-      <div class="lbl">Weight Trend</div>
+      <div class="chead"><i class="chip ${t.status==='target'?'b':''}">${I.wt}</i><div class="lbl">Weight Trend</div></div>
       <div class="tr"><div class="st" style="color:${col}">${label}</div>
       <div class="rt">${t.rate>=0?'+':''}${t.rate.toFixed(2)} lb/wk</div></div>
       ${t.status!=='target'?`<div class="note">${advice(t)}</div>`:''}
