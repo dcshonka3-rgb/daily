@@ -164,6 +164,26 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .hd .db.p{background:var(--blue-w);color:var(--blue);border-color:rgba(51,163,212,.3)}
 .hd .db.t{outline:1.5px solid var(--or);outline-offset:1px}
 
+
+/* AI estimate */
+.ai{background:var(--card2);border:1.5px solid var(--or-b2);border-radius:14px;padding:13px;margin-bottom:18px}
+.ai .top{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.ai .top .lbl{flex:1}
+.mic{width:34px;height:34px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;color:var(--or);flex:0 0 auto}
+.mic svg{width:16px;height:16px}
+.mic.rec{background:var(--or);color:#06141f;border-color:var(--or)}
+.ai textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px;font-size:16px;font-family:inherit;color:var(--tx);resize:none;min-height:76px;line-height:1.4}
+.ai textarea:focus{outline:0;border-color:var(--or)}
+.ai textarea::placeholder{color:var(--mu2)}
+.est{width:100%;margin-top:9px;padding:13px;border-radius:11px;background:var(--or);color:#0d1a13;font-size:15px;font-weight:800}
+.est:disabled{opacity:.55}
+.est.ghost{background:var(--card);border:1px solid var(--line);color:var(--mu);font-weight:700}
+.aimsg{font-size:12.5px;font-weight:600;margin-top:9px;line-height:1.45;color:var(--mu)}
+.aimsg.ok{color:var(--blue)}
+.aimsg.err{color:#ff8a8a}
+.keyin{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:14px;font-family:ui-monospace,Menlo,monospace}
+.keyin:focus{outline:0;border-color:var(--or)}
+
 /* ---------- sheet ---------- */
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:40;display:none}
 .scrim.on{display:block}
@@ -237,6 +257,18 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 <div class="sheet" id="shMeal">
   <div class="handle"></div>
   <div class="sh"><h2>Log Meal</h2><button class="x2 close">Close</button></div>
+
+  <div class="ai">
+    <div class="top">
+      <div class="lbl">What did you eat?</div>
+      <button class="mic hide" id="micBtn" aria-label="Voice input"></button>
+    </div>
+    <textarea id="aiTxt" rows="3" autocapitalize="sentences"
+      placeholder="chipotle chicken bowl with guac, and a protein shake"></textarea>
+    <button class="est" id="aiGo">Estimate with AI</button>
+    <div class="aimsg hide" id="aiMsg"></div>
+  </div>
+
   <div class="f">
     <label class="lbl">Calories</label>
     <input class="num" id="mCal" type="number" inputmode="numeric" placeholder="0">
@@ -308,6 +340,7 @@ const DEF={
     sleep:8.5, sleepMin:8, sleepScore:85,
     height:"5'10\"", startWeight:170,
     gainMin:0.25, gainMax:0.5, gainCut:0.75,
+    aiKey:'', aiModel:'claude-opus-5',
     supps:[{id:'s1',n:'Creatine'},{id:'s2',n:'Omega 3'},{id:'s3',n:'Vitamin D'},{id:'s4',n:'Magnesium'}]
   },
   days:{}, weekSeen:null
@@ -410,6 +443,7 @@ function lastWeight(before){
 
 /* ================= icons ================= */
 const ICO_DROP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3.2c3.5 4.2 6 7.5 6 10.6a6 6 0 0 1-12 0c0-3.1 2.5-6.4 6-10.6z"/></svg>';
+const ICO_MIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>';
 const ICO_CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg>';
 const SV=p=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
 const I={
@@ -597,6 +631,120 @@ function pills(el,vals,onPick,fmtV){
 }
 const markPill=(el,v)=>el.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));
 
+/* ================= AI meal estimate ================= */
+const AI_SCHEMA={
+  type:'object',
+  properties:{
+    calories:{type:'integer'},
+    protein:{type:'integer'},
+    summary:{type:'string'}
+  },
+  required:['calories','protein','summary'],
+  additionalProperties:false
+};
+const AI_SYSTEM=
+  'You estimate nutrition for a single logged meal. The user describes what they ate in casual language. '+
+  'Return your best single estimate of total calories and total grams of protein for everything described. '+
+  'Assume typical restaurant or home portion sizes when the amount is not stated. '+
+  'If a quantity is given (2 eggs, 8 oz, a cup), use it. Round calories to the nearest 10 and protein to the nearest whole gram. '+
+  'summary is one short line naming the items and their rough split, e.g. "burrito bowl 850 / shake 320". Never ask questions.';
+
+function aiMsg(text,cls){
+  const el=$('#aiMsg');
+  el.className='aimsg'+(cls?' '+cls:'');
+  el.textContent=text||'';
+  el.classList.toggle('hide',!text);
+}
+
+async function aiEstimate(){
+  const txt=$('#aiTxt').value.trim();
+  if(!txt){ $('#aiTxt').focus(); return }
+  const key=(S.settings.aiKey||'').trim();
+  if(!key){ aiMsg('Add your Anthropic API key in Settings to use this.','err'); return }
+
+  const btn=$('#aiGo');
+  btn.disabled=true; btn.textContent='Estimating…';
+  aiMsg('');
+  try{
+    const call=strict=>{
+      const body={
+        model:S.settings.aiModel||'claude-opus-5',
+        max_tokens:2000,
+        system:AI_SYSTEM+(strict?'':' Reply with ONLY a JSON object: {"calories":<int>,"protein":<int>,"summary":"<one line>"}'),
+        messages:[{role:'user',content:txt}]
+      };
+      if(strict) body.output_config={ effort:'low', format:{ type:'json_schema', schema:AI_SCHEMA } };
+      return fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'content-type':'application/json',
+          'x-api-key':key,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify(body)
+      });
+    };
+    let res=await call(true);
+    /* if this account or model rejects the structured-output params, retry plain */
+    if(res.status===400) res=await call(false);
+    const data=await res.json();
+    if(!res.ok){
+      const m=(data&&data.error&&data.error.message)||('HTTP '+res.status);
+      aiMsg(res.status===401?'That API key was rejected. Check it in Settings.':m,'err');
+      return;
+    }
+    if(data.stop_reason==='refusal'){ aiMsg('Could not estimate that one. Enter it manually.','err'); return }
+
+    const block=(data.content||[]).find(b=>b.type==='text');
+    let out=null;
+    if(block&&block.text){
+      try{ out=JSON.parse(block.text) }
+      catch(e){
+        const m=block.text.match(/\{[\s\S]*\}/);
+        if(m){ try{ out=JSON.parse(m[0]) }catch(e2){} }
+      }
+    }
+    if(!out||out.calories==null){ aiMsg('Got an unexpected response. Enter it manually.','err'); return }
+
+    $('#mCal').value=Math.round(out.calories);
+    $('#mPro').value=Math.round(out.protein||0);
+    $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+    $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+    aiMsg((out.summary||'')+' — adjust below if it looks off.','ok');
+  }catch(err){
+    aiMsg('Could not reach the API. Check your connection.','err');
+  }finally{
+    btn.disabled=false; btn.textContent='Estimate with AI';
+  }
+}
+$('#aiGo').onclick=aiEstimate;
+
+/* voice: Web Speech where supported; iOS also has the keyboard mic key */
+(function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR) return;
+  const btn=$('#micBtn');
+  btn.innerHTML=ICO_MIC;
+  btn.classList.remove('hide');
+  let rec=null, on=false;
+  btn.onclick=()=>{
+    if(on){ try{ rec.stop() }catch(e){} return }
+    rec=new SR();
+    rec.lang='en-US'; rec.interimResults=true; rec.continuous=false;
+    const base=$('#aiTxt').value.trim();
+    rec.onstart=()=>{ on=true; btn.classList.add('rec'); aiMsg('Listening…') };
+    rec.onresult=e=>{
+      let t='';
+      for(let i=0;i<e.results.length;i++) t+=e.results[i][0].transcript;
+      $('#aiTxt').value=(base?base+' ':'')+t;
+    };
+    rec.onerror=()=>{ aiMsg('Could not hear that. Try the mic key on your keyboard.','err') };
+    rec.onend=()=>{ on=false; btn.classList.remove('rec'); if($('#aiMsg').textContent==='Listening…') aiMsg('') };
+    try{ rec.start() }catch(e){ aiMsg('Voice input is unavailable here.','err') }
+  };
+})();
+
 /* meal */
 pills($('#mCalP'),[400,600,800,1000],v=>$('#mCal').value=v);
 pills($('#mProP'),[25,40,50,60],v=>$('#mPro').value=v,v=>v+'g');
@@ -604,8 +752,9 @@ function openMeal(){
   $('#mCal').value=''; $('#mPro').value='';
   $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
   $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+  $('#aiTxt').value=''; aiMsg('');
   show('#shMeal');
-  setTimeout(()=>$('#mCal').focus(),220);
+  setTimeout(()=>$('#aiTxt').focus(),240);
 }
 $('#mSave').onclick=()=>{
   const c=+$('#mCal').value||0, p=+$('#mPro').value||0;
@@ -724,6 +873,17 @@ function drawSet(){
   s.supps.forEach(x=>{ h+=`<div class="erow"><b>${esc(x.n)}</b><button class="del" data-ds="${x.id}">×</button></div>` });
   h+=`<div class="addrow"><input id="nsN" placeholder="Add supplement"><button id="nsAdd">+</button></div>`;
 
+  h+=`<div class="sect">AI Meal Estimate</div>`;
+  h+=`<div class="row" style="display:block;padding-bottom:12px">
+      <span style="display:block;font-size:15px;font-weight:600;margin-bottom:9px">Anthropic API key</span>
+      <input class="keyin" type="password" id="aiKeyIn" placeholder="sk-ant-..." value="${esc(s.aiKey||'')}" autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>`;
+  h+=`<div class="row"><span>Model</span><div class="pills" style="margin:0;flex:0 0 auto">
+      <button class="pill ${s.aiModel!=='claude-haiku-4-5'?'on':''}" data-am="claude-opus-5" style="padding:9px 13px;flex:0 0 auto">Opus 5</button>
+      <button class="pill ${s.aiModel==='claude-haiku-4-5'?'on':''}" data-am="claude-haiku-4-5" style="padding:9px 13px;flex:0 0 auto">Haiku</button>
+      </div></div>`;
+  h+=`<div class="note" style="border:0;padding:0;margin-top:11px">Opus 5 is the most accurate. Haiku 4.5 is faster and cheaper per estimate. Your key is stored only on this device and goes straight to Anthropic.</div>`;
+
   h+=`<div class="sect">Data</div>`;
   h+=`<button class="go alt" id="exp">Export backup (.json)</button>`;
   h+=`<button class="go alt" id="imp">Import backup</button>`;
@@ -733,6 +893,11 @@ function drawSet(){
 
   $('#setBody').querySelectorAll('input[data-k]').forEach(i=>{
     i.onchange=()=>{ const v=+i.value; if(!isNaN(v)&&v>0){ S.settings[i.dataset.k]=v; save(); drawSet(); render() } };
+  });
+  const kin=$('#aiKeyIn');
+  if(kin) kin.onchange=e=>{ S.settings.aiKey=e.target.value.trim(); save() };
+  $('#setBody').querySelectorAll('[data-am]').forEach(b=>b.onclick=()=>{
+    S.settings.aiModel=b.dataset.am; save(); drawSet();
   });
   $('#setBody').querySelectorAll('input[data-t]').forEach(i=>{
     i.onchange=()=>{ S.settings[i.dataset.t]=i.value.trim(); save() };
