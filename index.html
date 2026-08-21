@@ -1175,6 +1175,13 @@ function localEstimate(text){
   return {cal:Math.round(cal/10)*10, pro:Math.round(pro), hit, miss};
 }
 
+function aiMsg(text,cls){
+  const el=$('#aiMsg');
+  el.className='aimsg'+(cls?' '+cls:'');
+  el.textContent=text||'';
+  el.classList.toggle('hide',!text);
+}
+
 function runLocal(){
   const txt=$('#aiTxt').value.trim();
   if(!txt){ $('#aiTxt').focus(); return }
