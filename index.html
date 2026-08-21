@@ -634,7 +634,21 @@ function pills(el,vals,onPick,fmtV){
 const markPill=(el,v)=>el.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));
 
 /* ================= free offline meal estimator ================= */
-const FOOD_TABLE=`chicken breast|47|8.7|oz|6
+const FOOD_TABLE=`chipotle chicken bowl|800|45|each|1
+chipotle steak bowl|850|42|each|1
+chicken caesar salad|560|45|each|1
+chicken salad|450|35|each|1
+chicken bowl|800|50|each|1
+steak bowl|850|42|each|1
+chicken burrito|1000|45|each|1
+steak burrito|1050|42|each|1
+chicken wrap|500|30|each|1
+turkey sandwich|450|28|each|1
+chicken tacos|220|13|each|3
+steak tacos|230|13|each|3
+protein oatmeal|350|30|cup|1
+guac|50|0.6|serving|2
+chicken breast|47|8.7|oz|6
 grilled chicken|47|8.7|oz|6
 rotisserie chicken|55|7|oz|6
 chicken thigh|60|6.5|oz|5
@@ -745,7 +759,7 @@ salad greens|10|1|cup|2
 vegetables|50|2|cup|1
 corn|130|5|cup|1
 granola bar|190|4|each|1
-granola|300|9|cup|1
+granola|300|9|cup|0.5
 chips|150|2|oz|1
 crackers|130|2|oz|1
 cookie|160|2|each|2
