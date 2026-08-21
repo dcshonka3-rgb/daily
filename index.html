@@ -342,7 +342,6 @@ const DEF={
     sleep:8.5, sleepMin:8, sleepScore:85,
     height:"5'10\"", startWeight:170,
     gainMin:0.25, gainMax:0.5, gainCut:0.75,
-    aiKey:'', aiModel:'claude-opus-5',
     supps:[{id:'s1',n:'Creatine'},{id:'s2',n:'Omega 3'},{id:'s3',n:'Vitamin D'},{id:'s4',n:'Magnesium'}]
   },
   days:{}, weekSeen:null
@@ -634,147 +633,506 @@ function pills(el,vals,onPick,fmtV){
 const markPill=(el,v)=>el.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));
 
 /* ================= free offline meal estimator ================= */
-const FOOD_TABLE=`chipotle chicken bowl|800|45|each|1
-chipotle steak bowl|850|42|each|1
-chicken caesar salad|560|45|each|1
-chicken salad|450|35|each|1
-chicken bowl|800|50|each|1
-steak bowl|850|42|each|1
-chicken burrito|1000|45|each|1
-steak burrito|1050|42|each|1
-chicken wrap|500|30|each|1
-turkey sandwich|450|28|each|1
-chicken tacos|220|13|each|3
-steak tacos|230|13|each|3
-protein oatmeal|350|30|cup|1
-guac|50|0.6|serving|2
+const FOOD_TABLE=`
 chicken breast|47|8.7|oz|6
 grilled chicken|47|8.7|oz|6
-rotisserie chicken|55|7|oz|6
+baked chicken|47|8.7|oz|6
+fried chicken|80|6.5|oz|6
 chicken thigh|60|6.5|oz|5
+chicken tender|90|7|each|3
+chicken strip|90|7|each|3
+chicken nugget|47|2.5|each|8
+rotisserie chicken|55|7|oz|6
+ground chicken|43|7.5|oz|6
+shredded chicken|47|8.7|oz|6
+chicken wing|72|6.7|each|6
+boneless wing|60|4.5|each|8
 chicken|47|8.7|oz|6
-ground beef|60|6.4|oz|6
-steak|68|7.3|oz|8
-ribeye|75|7|oz|8
-pork chop|60|7|oz|6
-pork|60|7|oz|6
-ribs|90|6|oz|8
-bacon|43|3|slice|3
-sausage|85|5|link|2
-turkey|30|5.5|oz|4
+ground turkey|47|7.7|oz|6
+turkey breast|33|7.7|oz|5
 deli turkey|30|5.5|oz|4
+turkey|33|7.7|oz|5
+deli ham|35|5|oz|4
 ham|35|5|oz|4
+roast beef|45|7.5|oz|5
+lean ground beef|48|7.5|oz|6
+ground beef|60|6.4|oz|6
+ribeye|75|7|oz|8
+sirloin|55|8|oz|8
+filet mignon|60|8|oz|7
+new york strip|65|7.5|oz|8
+flank steak|55|8|oz|8
+skirt steak|60|7.8|oz|8
+brisket|80|6.5|oz|6
+prime rib|85|6.5|oz|8
+pot roast|500|45|each|1
+steak|68|7.3|oz|8
+short ribs|95|6|oz|6
+ribs|90|6|oz|8
+pork chop|60|7|oz|6
+pork tenderloin|40|7.5|oz|6
+pulled pork|65|6.5|oz|5
+pork belly|145|3|oz|4
+pork|60|7|oz|6
+turkey bacon|30|2.5|slice|3
+bacon|43|3|slice|3
+breakfast sausage|85|5|link|2
+italian sausage|230|13|link|1
+bratwurst|280|12|each|1
+chorizo|130|7|oz|3
+sausage|85|5|link|2
+hot dog|150|5|each|2
+pepperoni|140|6|oz|1
+salami|110|6|oz|1
+prosciutto|70|8|oz|1
+lamb|70|7|oz|6
+veal|55|8|oz|6
+venison|45|8|oz|6
+bison|40|8|oz|6
+duck|100|5.5|oz|5
+meatball|60|3|each|4
+meatloaf|290|20|each|1
+beef jerky|80|13|oz|1
+jerky|80|13|oz|1
+grilled salmon|58|6.3|oz|6
+smoked salmon|33|5.2|oz|3
 salmon|58|6.3|oz|6
+canned tuna|33|7|oz|5
+ahi tuna|35|7.5|oz|6
 tuna|33|7|oz|5
 tilapia|36|7.4|oz|6
 cod|24|5.3|oz|6
+halibut|31|6.5|oz|6
+mahi mahi|30|6.5|oz|6
+swordfish|40|6.8|oz|6
+trout|47|6.5|oz|6
+sardines|60|7|oz|3
+anchovies|60|8|oz|1
 shrimp|28|6|oz|5
+crab|25|5.5|oz|5
+lobster|26|5.5|oz|5
+scallops|30|5.7|oz|5
+mussels|40|5.5|oz|5
+clams|30|5|oz|5
+oysters|20|2.3|each|6
+calamari|50|4.5|oz|5
+fish stick|60|3|each|5
+fish and chips|850|35|each|1
+sashimi|40|8|oz|4
+poke bowl|600|35|each|1
+scrambled eggs|90|6.3|each|3
+hard boiled egg|78|6.3|each|2
+fried egg|90|6.3|each|2
 egg whites|17|3.6|each|4
 egg white|17|3.6|each|4
+omelette|300|20|each|1
+omelet|300|20|each|1
 eggs|72|6.3|each|2
 egg|72|6.3|each|2
+nonfat greek yogurt|130|23|cup|1
 greek yogurt|150|20|cup|1
+skyr|130|23|cup|1
 cottage cheese|200|25|cup|1
+frozen yogurt|220|6|cup|1
 yogurt|140|8|cup|1
+chocolate milk|210|8|cup|1
 whole milk|150|8|cup|1
+almond milk|40|1|cup|1
+oat milk|120|3|cup|1
+soy milk|105|7|cup|1
 skim milk|90|8|cup|1
 milk|130|8|cup|1
-cheddar|115|7|oz|1
-cheese|110|7|slice|1
+heavy cream|100|0.6|tbsp|2
+half and half|20|0.5|tbsp|2
+sour cream|30|0.5|tbsp|2
 cream cheese|50|1|tbsp|2
+whipped cream|25|0.2|tbsp|2
+string cheese|80|7|each|1
+american cheese|105|5|slice|1
+mozzarella|85|6.3|oz|1
+parmesan|22|2|tbsp|2
+cheddar|115|7|oz|1
+provolone|100|7.3|slice|1
+swiss|108|7.6|oz|1
+feta|75|4|oz|1
+goat cheese|75|5|oz|1
+blue cheese|100|6|oz|1
+queso|120|5|oz|2
+cheese|110|7|slice|1
+butter|100|0|tbsp|1
+ghee|110|0|tbsp|1
 protein shake|250|30|each|1
 protein powder|120|24|scoop|1
 whey|120|24|scoop|1
+casein|120|24|scoop|1
 mass gainer|650|50|each|1
 protein bar|220|20|each|1
-smoothie|300|8|each|1
-white rice|205|4.3|cup|1
+quest bar|190|21|each|1
+clif bar|250|9|each|1
+rx bar|210|12|each|1
+protein cookie|350|16|each|1
+protein oatmeal|350|30|cup|1
+protein pancakes|220|20|each|3
+protein ice cream|280|20|each|1
+collagen|35|9|scoop|1
+greens powder|40|2|scoop|1
+pre workout|10|0|scoop|1
+creatine|0|0|scoop|1
+cilantro lime rice|210|4|cup|1
+jasmine rice|205|4.3|cup|1
+basmati rice|210|4.4|cup|1
 brown rice|216|5|cup|1
+white rice|205|4.3|cup|1
+fried rice|340|9|cup|1
 rice|205|4.3|cup|1
 quinoa|220|8|cup|1
-pasta|220|8|cup|1
-spaghetti|220|8|cup|1
+couscous|176|6|cup|1
+barley|190|3.5|cup|1
+farro|200|7|cup|1
+spaghetti and meatballs|700|35|each|1
+chicken alfredo|900|45|each|1
+chicken parmesan|700|50|each|1
 mac and cheese|350|12|cup|1
+spaghetti|220|8|cup|1
 lasagna|400|25|each|1
+ravioli|350|15|cup|1
+gnocchi|250|6|cup|1
+penne|220|8|cup|1
+macaroni|220|8|cup|1
+lo mein|400|12|cup|1
+pad thai|700|25|each|1
+pasta|220|8|cup|1
+noodles|220|8|cup|1
+ramen|380|10|each|1
+pho|450|30|each|1
+overnight oats|350|15|cup|1
 oatmeal|160|6|cup|1
 oats|160|6|cup|1
+grits|180|4|cup|1
+cream of wheat|130|4|cup|1
 cereal|180|4|cup|1
+granola|300|9|cup|0.5
 bagel|280|11|each|1
+english muffin|130|5|each|1
+croissant|270|6|each|1
+biscuit|200|4|each|1
+cornbread|190|4|each|1
+muffin|400|6|each|1
+sourdough|90|3|slice|2
+wheat bread|80|4|slice|2
+white bread|80|3|slice|2
 toast|80|3|slice|2
 bread|80|3|slice|2
+corn tortilla|60|1.5|each|2
 tortilla|140|4|each|2
-sweet potato|180|4|each|1
-potato|160|4|each|1
+pita|165|6|each|1
+naan|260|9|each|1
+roll|130|4|each|1
+bun|150|5|each|1
+crackers|130|2|oz|1
+pretzels|110|3|oz|1
+rice cake|35|0.7|each|2
+popcorn|30|1|cup|3
+tortilla chips|140|2|oz|1
+potato chips|155|2|oz|1
+pita chips|130|3|oz|1
+chips|150|2|oz|1
+sweet potato fries|300|3|each|1
 mashed potatoes|240|4|cup|1
+baked potato|160|4|each|1
+sweet potato|180|4|each|1
+tater tots|250|3|cup|1
+hash browns|200|2|cup|1
 french fries|380|4|each|1
 fries|380|4|each|1
+potato|160|4|each|1
+refried beans|220|12|cup|1
 black beans|227|15|cup|1
+pinto beans|245|15|cup|1
+kidney beans|225|15|cup|1
+green beans|35|2|cup|1
 chickpeas|270|15|cup|1
+garbanzo|270|15|cup|1
+lentils|230|18|cup|1
+edamame|190|18|cup|1
 beans|227|15|cup|1
+tofu|180|20|cup|1
+tempeh|320|34|cup|1
+seitan|100|21|oz|3
+falafel|330|13|each|1
 peanut butter|95|3.5|tbsp|2
 almond butter|98|3.4|tbsp|2
+sunflower seeds|165|5.5|oz|1
+pumpkin seeds|160|8.5|oz|1
+chia seeds|60|2|tbsp|1
+flax seeds|55|2|tbsp|1
+hemp seeds|90|5|tbsp|1
+pistachios|160|6|oz|1
+macadamia|200|2|oz|1
+cashews|155|5|oz|1
+walnuts|185|4.3|oz|1
 almonds|165|6|oz|1
 peanuts|160|7|oz|1
+pecans|195|2.6|oz|1
+mixed nuts|170|5|oz|1
 trail mix|140|4|oz|1
-avocado|240|3|each|1
 guacamole|50|0.6|serving|2
-hummus|25|1.2|tbsp|2
+guac|50|0.6|serving|2
+avocado|240|3|each|1
 olive oil|120|0|tbsp|1
-butter|100|0|tbsp|1
-burrito bowl|800|45|each|1
+coconut oil|120|0|tbsp|1
+vegetable oil|120|0|tbsp|1
+olives|25|0.2|oz|1
+blackberries|62|2|cup|1
+strawberries|50|1|cup|1
+blueberries|85|1.1|cup|1
+raspberries|65|1.5|cup|1
+berries|60|1|cup|1
+pineapple|82|0.9|cup|1
+watermelon|46|0.9|cup|1
+cantaloupe|54|1.3|cup|1
+pomegranate|235|5|each|1
+grapefruit|52|1|each|1
+applesauce|100|0.4|cup|1
+dried mango|130|0.5|oz|1
+cherries|90|1.5|cup|1
+banana|105|1.3|each|1
+orange juice|110|2|cup|1
+apple juice|115|0.2|cup|1
+apple|95|0.5|each|1
+orange|65|1.2|each|1
+grapes|105|1.1|cup|1
+mango|100|1.4|cup|1
+peach|60|1.4|each|1
+pear|100|0.6|each|1
+plum|30|0.5|each|1
+kiwi|42|0.8|each|1
+raisins|130|1.3|oz|1
+dates|66|0.4|each|3
+fruit|80|1|each|1
+brussels sprouts|56|4|cup|1
+cauliflower|27|2|cup|1
+asparagus|27|3|cup|1
+mushrooms|21|3|cup|1
+bell pepper|30|1|each|1
+salad greens|10|1|cup|2
+broccoli|55|3.7|cup|1
+zucchini|20|1.5|cup|1
+cucumber|16|0.7|cup|1
+eggplant|35|1|cup|1
+spinach|7|0.9|cup|2
+lettuce|8|0.6|cup|2
+arugula|5|0.5|cup|2
+carrots|52|1.2|cup|1
+cabbage|22|1|cup|1
+celery|16|0.7|cup|1
+tomato|22|1.1|each|1
+squash|40|1|cup|1
+onion|44|1.2|cup|0.5
+peas|118|8|cup|1
+kale|33|2.9|cup|1
+corn|130|5|cup|1
+vegetables|50|2|cup|1
+veggies|50|2|cup|1
+caesar dressing|80|0.5|tbsp|2
+vinaigrette|60|0|tbsp|2
+pico de gallo|8|0.4|tbsp|2
+maple syrup|52|0|tbsp|2
+bbq sauce|30|0|tbsp|1
+soy sauce|8|1|tbsp|1
+hot sauce|1|0|tbsp|1
+sriracha|5|0|tbsp|1
+marinara|140|6|cup|0.5
+dressing|70|0.3|tbsp|2
+alfredo|200|5|serving|1
+ketchup|20|0|tbsp|1
+mustard|3|0|tbsp|1
+nutella|100|1|tbsp|1
+hummus|25|1.2|tbsp|2
+salsa|10|0.5|tbsp|2
+honey|64|0|tbsp|1
+gravy|25|0.5|tbsp|2
+pesto|80|2|tbsp|1
+ranch|73|0.4|tbsp|2
+jelly|50|0|tbsp|1
+mayo|94|0|tbsp|1
+jam|50|0|tbsp|1
+chipotle chicken bowl|800|45|each|1
+chipotle steak bowl|850|42|each|1
+chipotle burrito|1050|45|each|1
 chipotle bowl|800|45|each|1
+burrito bowl|800|45|each|1
+breakfast burrito|600|25|each|1
+chicken burrito|1000|45|each|1
+steak burrito|1050|42|each|1
+chicken bowl|800|50|each|1
+steak bowl|850|42|each|1
 chipotle|800|45|each|1
 burrito|1000|40|each|1
+chicken quesadilla|600|35|each|1
+quesadilla|550|25|each|1
+chimichanga|700|25|each|1
+enchilada|320|17|each|2
+fajitas|600|40|each|1
+nachos|700|25|each|1
+tamale|285|10|each|2
+chicken tacos|220|13|each|3
+steak tacos|230|13|each|3
+fish tacos|250|12|each|3
+taco|200|9|each|3
+double cheeseburger|750|40|each|1
+bacon cheeseburger|700|35|each|1
+five guys burger|840|47|each|1
+quarter pounder|520|30|each|1
 cheeseburger|550|28|each|1
 hamburger|450|25|each|1
+big mac|590|25|each|1
+whopper|660|28|each|1
+mcdouble|400|22|each|1
+mcchicken|400|14|each|1
 burger|450|25|each|1
-pizza|285|12|slice|2
+spicy chicken sandwich|550|32|each|1
+grilled chicken sandwich|380|28|each|1
+chick fil a sandwich|440|28|each|1
 chicken sandwich|500|30|each|1
+breakfast sandwich|450|20|each|1
+turkey sandwich|450|28|each|1
+club sandwich|600|35|each|1
+ham sandwich|400|22|each|1
+egg sandwich|400|20|each|1
+grilled cheese|450|17|each|1
+philly cheesesteak|750|40|each|1
+cheesesteak|750|40|each|1
+meatball sub|700|32|each|1
+italian sub|750|35|each|1
 sandwich|400|20|each|1
+footlong|900|45|each|1
+hoagie|700|35|each|1
+blt|480|18|each|1
 sub|600|30|each|1
-taco|200|9|each|3
+chicken wrap|500|30|each|1
+avocado toast|300|8|each|1
+shawarma|650|40|each|1
 wrap|450|25|each|1
+gyro|600|30|each|1
+pepperoni pizza|300|13|slice|2
+personal pizza|700|30|each|1
+cheese pizza|270|11|slice|2
+stromboli|750|35|each|1
+calzone|800|38|each|1
+pizza|285|12|slice|2
+mozzarella sticks|90|4|each|4
+onion rings|400|5|each|1
 wings|72|6.7|each|6
+sweet and sour chicken|450|20|each|1
+kung pao chicken|290|25|each|1
+beef and broccoli|350|30|each|1
+sesame chicken|450|22|each|1
+teriyaki chicken|400|35|each|1
+orange chicken|490|25|each|1
+general tso|430|20|each|1
+panda express|800|35|each|1
+potstickers|60|3|each|6
+dumplings|60|3|each|6
+spring roll|100|3|each|2
+egg roll|220|7|each|1
 sushi roll|300|9|each|2
 sushi|300|9|roll|2
+tikka masala|550|35|each|1
+butter chicken|550|32|each|1
+biryani|600|25|cup|1
+bibimbap|600|28|each|1
+korean bbq|700|50|each|1
+curry|500|25|each|1
+chicken caesar salad|560|45|each|1
 caesar salad|400|12|each|1
+chicken salad|450|35|each|1
+greek salad|350|10|each|1
+cobb salad|550|35|each|1
+chef salad|450|30|each|1
+tuna salad|380|25|each|1
+egg salad|350|12|each|1
+side salad|80|2|each|1
 salad|250|8|each|1
+chicken noodle soup|150|12|cup|1
+clam chowder|250|8|cup|1
+tomato soup|160|4|cup|1
 soup|180|8|cup|1
 chili|280|20|cup|1
+chicken and waffles|850|40|each|1
+chicken and rice|650|50|each|1
+steak and eggs|700|55|each|1
+shepherds pie|450|25|each|1
+casserole|400|25|cup|1
 stir fry|450|30|each|1
+french toast|150|5|slice|2
+protein pancake|220|20|each|3
 pancakes|175|5|each|3
 pancake|175|5|each|3
 waffle|220|6|each|2
-french toast|150|5|slice|2
-banana|105|1.3|each|1
-apple|95|0.5|each|1
-orange|65|1.2|each|1
-berries|60|1|cup|1
-blueberries|85|1.1|cup|1
-strawberries|50|1|cup|1
-grapes|105|1.1|cup|1
-broccoli|55|3.7|cup|1
-spinach|7|0.9|cup|2
-salad greens|10|1|cup|2
-vegetables|50|2|cup|1
-corn|130|5|cup|1
-granola bar|190|4|each|1
-granola|300|9|cup|0.5
-chips|150|2|oz|1
-crackers|130|2|oz|1
-cookie|160|2|each|2
-brownie|240|3|each|1
+crepe|130|4|each|2
+cinnamon roll|380|6|each|1
+poptart|200|2|each|2
+danish|300|5|each|1
+scone|400|7|each|1
 donut|250|3|each|1
+acai bowl|500|8|each|1
+smoothie|300|8|each|1
+parfait|300|12|each|1
+milkshake|550|12|each|1
+cheesecake|400|7|slice|1
 ice cream|275|5|cup|1
+brownie|240|3|each|1
+apple pie|300|2|slice|1
+cookie|160|2|each|2
+cake|350|4|slice|1
+pie|320|3|slice|1
+granola bar|190|4|each|1
+fruit snacks|80|0|each|1
 candy bar|250|4|each|1
+gummy bears|140|2|oz|1
+marshmallow|25|0.2|each|4
+chocolate|155|2|oz|1
+snickers|250|4|each|1
+skittles|160|0|oz|1
+pudding|150|2|each|1
+jello|70|1|each|1
+frappuccino|400|5|each|1
+iced coffee|100|3|each|1
+black coffee|5|0|each|1
+cappuccino|120|8|each|1
+cold brew|5|0|each|1
+espresso|5|0|each|1
+green tea|2|0|each|1
+latte|190|10|each|1
+coffee|5|0|each|1
+diet soda|0|0|each|1
+energy drink|160|0|each|1
+red bull|110|0|each|1
 gatorade|140|0|each|1
+powerade|130|0|each|1
+kombucha|60|0|each|1
+lemonade|120|0|cup|1
+celsius|10|0|each|1
+monster|210|0|each|1
 soda|150|0|each|1
-orange juice|110|2|cup|1
+coke|140|0|each|1
 juice|115|1|cup|1
+water|0|0|each|1
+light beer|100|0.7|each|1
+white claw|100|0|each|1
+margarita|250|0|each|1
+red wine|125|0|glass|1
+white wine|120|0|glass|1
+seltzer|100|0|each|1
+cocktail|200|0|each|1
+whiskey|105|0|each|1
+tequila|97|0|each|1
+vodka|97|0|each|1
 beer|150|1.6|each|1
 wine|125|0|glass|1
-latte|190|10|each|1
-coffee|5|0|each|1`;
+ipa|200|2|each|1
+`;
 const FOODS=FOOD_TABLE.trim().split('\n').map(r=>{
   const [n,k,p,u,d]=r.split('|');
   return {n, k:+k, p:+p, u, d:+d};
@@ -822,7 +1180,7 @@ function runLocal(){
   if(!txt){ $('#aiTxt').focus(); return }
   const r=localEstimate(txt);
   if(!r.hit.length){
-    aiMsg('Did not recognize any of that. Type the numbers below, or add an API key in Settings for open-ended AI.','err');
+    aiMsg('Did not recognize any of that. Type the numbers in below.','err');
     return;
   }
   $('#mCal').value=r.cal;
@@ -834,99 +1192,7 @@ function runLocal(){
   aiMsg(msg, r.miss.length?'':'ok');
 }
 
-function estimateMeal(){
-  if((S.settings.aiKey||'').trim()) return aiEstimate();
-  return runLocal();
-}
-
-/* ================= AI meal estimate ================= */
-const AI_SCHEMA={
-  type:'object',
-  properties:{
-    calories:{type:'integer'},
-    protein:{type:'integer'},
-    summary:{type:'string'}
-  },
-  required:['calories','protein','summary'],
-  additionalProperties:false
-};
-const AI_SYSTEM=
-  'You estimate nutrition for a single logged meal. The user describes what they ate in casual language. '+
-  'Return your best single estimate of total calories and total grams of protein for everything described. '+
-  'Assume typical restaurant or home portion sizes when the amount is not stated. '+
-  'If a quantity is given (2 eggs, 8 oz, a cup), use it. Round calories to the nearest 10 and protein to the nearest whole gram. '+
-  'summary is one short line naming the items and their rough split, e.g. "burrito bowl 850 / shake 320". Never ask questions.';
-
-function aiMsg(text,cls){
-  const el=$('#aiMsg');
-  el.className='aimsg'+(cls?' '+cls:'');
-  el.textContent=text||'';
-  el.classList.toggle('hide',!text);
-}
-
-async function aiEstimate(){
-  const txt=$('#aiTxt').value.trim();
-  if(!txt){ $('#aiTxt').focus(); return }
-  const key=(S.settings.aiKey||'').trim();
-  if(!key){ aiMsg('Add your Anthropic API key in Settings to use this.','err'); return }
-
-  const btn=$('#aiGo');
-  btn.disabled=true; btn.textContent='Estimating…';
-  aiMsg('');
-  try{
-    const call=strict=>{
-      const body={
-        model:S.settings.aiModel||'claude-opus-5',
-        max_tokens:2000,
-        system:AI_SYSTEM+(strict?'':' Reply with ONLY a JSON object: {"calories":<int>,"protein":<int>,"summary":"<one line>"}'),
-        messages:[{role:'user',content:txt}]
-      };
-      if(strict) body.output_config={ effort:'low', format:{ type:'json_schema', schema:AI_SCHEMA } };
-      return fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{
-          'content-type':'application/json',
-          'x-api-key':key,
-          'anthropic-version':'2023-06-01',
-          'anthropic-dangerous-direct-browser-access':'true'
-        },
-        body:JSON.stringify(body)
-      });
-    };
-    let res=await call(true);
-    /* if this account or model rejects the structured-output params, retry plain */
-    if(res.status===400) res=await call(false);
-    const data=await res.json();
-    if(!res.ok){
-      const m=(data&&data.error&&data.error.message)||('HTTP '+res.status);
-      aiMsg(res.status===401?'That API key was rejected. Check it in Settings.':m,'err');
-      return;
-    }
-    if(data.stop_reason==='refusal'){ aiMsg('Could not estimate that one. Enter it manually.','err'); return }
-
-    const block=(data.content||[]).find(b=>b.type==='text');
-    let out=null;
-    if(block&&block.text){
-      try{ out=JSON.parse(block.text) }
-      catch(e){
-        const m=block.text.match(/\{[\s\S]*\}/);
-        if(m){ try{ out=JSON.parse(m[0]) }catch(e2){} }
-      }
-    }
-    if(!out||out.calories==null){ aiMsg('Got an unexpected response. Enter it manually.','err'); return }
-
-    $('#mCal').value=Math.round(out.calories);
-    $('#mPro').value=Math.round(out.protein||0);
-    $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-    $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-    aiMsg((out.summary||'')+' — adjust below if it looks off.','ok');
-  }catch(err){
-    aiMsg('Could not reach the API. Check your connection.','err');
-  }finally{
-    btn.disabled=false; btn.textContent='Estimate';
-  }
-}
-$('#aiGo').onclick=estimateMeal;
+$('#aiGo').onclick=runLocal;
 
 /* voice: Web Speech where supported; iOS also has the keyboard mic key */
 (function(){
@@ -961,9 +1227,7 @@ function openMeal(){
   $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
   $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
   $('#aiTxt').value=''; aiMsg('');
-  $('#aiHint').textContent=(S.settings.aiKey||'').trim()
-    ? 'Using AI · '+((S.settings.aiModel||'').includes('haiku')?'Haiku 4.5':'Opus 5')
-    : 'Free, instant, works offline';
+
   show('#shMeal');
   setTimeout(()=>$('#aiTxt').focus(),240);
 }
@@ -1084,18 +1348,6 @@ function drawSet(){
   s.supps.forEach(x=>{ h+=`<div class="erow"><b>${esc(x.n)}</b><button class="del" data-ds="${x.id}">×</button></div>` });
   h+=`<div class="addrow"><input id="nsN" placeholder="Add supplement"><button id="nsAdd">+</button></div>`;
 
-  h+=`<div class="sect">Meal Estimate</div>`;
-  h+=`<div class="note" style="border:0;padding:0;margin:2px 0 12px">Estimating runs free on this device using a built-in food list. Adding an Anthropic API key below is optional — it swaps in open-ended AI that understands anything you type, and costs about a tenth of a cent per meal.</div>`;
-  h+=`<div class="row" style="display:block;padding-bottom:12px">
-      <span style="display:block;font-size:15px;font-weight:600;margin-bottom:9px">Anthropic API key — optional</span>
-      <input class="keyin" type="password" id="aiKeyIn" placeholder="sk-ant-..." value="${esc(s.aiKey||'')}" autocomplete="off" autocapitalize="off" spellcheck="false">
-      </div>`;
-  h+=`<div class="row"><span>Model</span><div class="pills" style="margin:0;flex:0 0 auto">
-      <button class="pill ${s.aiModel!=='claude-haiku-4-5'?'on':''}" data-am="claude-opus-5" style="padding:9px 13px;flex:0 0 auto">Opus 5</button>
-      <button class="pill ${s.aiModel==='claude-haiku-4-5'?'on':''}" data-am="claude-haiku-4-5" style="padding:9px 13px;flex:0 0 auto">Haiku</button>
-      </div></div>`;
-  h+=`<div class="note" style="border:0;padding:0;margin-top:11px">Only used when a key is set. Haiku 4.5 is faster and cheaper; Opus 5 is more accurate. Your key is stored only on this device and goes straight to Anthropic.</div>`;
-
   h+=`<div class="sect">Data</div>`;
   h+=`<button class="go alt" id="exp">Export backup (.json)</button>`;
   h+=`<button class="go alt" id="imp">Import backup</button>`;
@@ -1105,11 +1357,6 @@ function drawSet(){
 
   $('#setBody').querySelectorAll('input[data-k]').forEach(i=>{
     i.onchange=()=>{ const v=+i.value; if(!isNaN(v)&&v>0){ S.settings[i.dataset.k]=v; save(); drawSet(); render() } };
-  });
-  const kin=$('#aiKeyIn');
-  if(kin) kin.onchange=e=>{ S.settings.aiKey=e.target.value.trim(); save() };
-  $('#setBody').querySelectorAll('[data-am]').forEach(b=>b.onclick=()=>{
-    S.settings.aiModel=b.dataset.am; save(); drawSet();
   });
   $('#setBody').querySelectorAll('input[data-t]').forEach(i=>{
     i.onchange=()=>{ S.settings[i.dataset.t]=i.value.trim(); save() };
