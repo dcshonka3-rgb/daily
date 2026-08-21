@@ -178,6 +178,7 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .est{width:100%;margin-top:9px;padding:13px;border-radius:11px;background:var(--or);color:#0d1a13;font-size:15px;font-weight:800}
 .est:disabled{opacity:.55}
 .est.ghost{background:var(--card);border:1px solid var(--line);color:var(--mu);font-weight:700}
+.aihint{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mu2);text-align:center;margin-top:8px}
 .aimsg{font-size:12.5px;font-weight:600;margin-top:9px;line-height:1.45;color:var(--mu)}
 .aimsg.ok{color:var(--blue)}
 .aimsg.err{color:#ff8a8a}
@@ -265,7 +266,8 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
     </div>
     <textarea id="aiTxt" rows="3" autocapitalize="sentences"
       placeholder="chipotle chicken bowl with guac, and a protein shake"></textarea>
-    <button class="est" id="aiGo">Estimate with AI</button>
+    <button class="est" id="aiGo">Estimate</button>
+    <div class="aihint" id="aiHint">Free, instant, works offline</div>
     <div class="aimsg hide" id="aiMsg"></div>
   </div>
 
@@ -631,6 +633,198 @@ function pills(el,vals,onPick,fmtV){
 }
 const markPill=(el,v)=>el.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));
 
+/* ================= free offline meal estimator ================= */
+const FOOD_TABLE=`chicken breast|47|8.7|oz|6
+grilled chicken|47|8.7|oz|6
+rotisserie chicken|55|7|oz|6
+chicken thigh|60|6.5|oz|5
+chicken|47|8.7|oz|6
+ground beef|60|6.4|oz|6
+steak|68|7.3|oz|8
+ribeye|75|7|oz|8
+pork chop|60|7|oz|6
+pork|60|7|oz|6
+ribs|90|6|oz|8
+bacon|43|3|slice|3
+sausage|85|5|link|2
+turkey|30|5.5|oz|4
+deli turkey|30|5.5|oz|4
+ham|35|5|oz|4
+salmon|58|6.3|oz|6
+tuna|33|7|oz|5
+tilapia|36|7.4|oz|6
+cod|24|5.3|oz|6
+shrimp|28|6|oz|5
+egg whites|17|3.6|each|4
+egg white|17|3.6|each|4
+eggs|72|6.3|each|2
+egg|72|6.3|each|2
+greek yogurt|150|20|cup|1
+cottage cheese|200|25|cup|1
+yogurt|140|8|cup|1
+whole milk|150|8|cup|1
+skim milk|90|8|cup|1
+milk|130|8|cup|1
+cheddar|115|7|oz|1
+cheese|110|7|slice|1
+cream cheese|50|1|tbsp|2
+protein shake|250|30|each|1
+protein powder|120|24|scoop|1
+whey|120|24|scoop|1
+mass gainer|650|50|each|1
+protein bar|220|20|each|1
+smoothie|300|8|each|1
+white rice|205|4.3|cup|1
+brown rice|216|5|cup|1
+rice|205|4.3|cup|1
+quinoa|220|8|cup|1
+pasta|220|8|cup|1
+spaghetti|220|8|cup|1
+mac and cheese|350|12|cup|1
+lasagna|400|25|each|1
+oatmeal|160|6|cup|1
+oats|160|6|cup|1
+cereal|180|4|cup|1
+bagel|280|11|each|1
+toast|80|3|slice|2
+bread|80|3|slice|2
+tortilla|140|4|each|2
+sweet potato|180|4|each|1
+potato|160|4|each|1
+mashed potatoes|240|4|cup|1
+french fries|380|4|each|1
+fries|380|4|each|1
+black beans|227|15|cup|1
+chickpeas|270|15|cup|1
+beans|227|15|cup|1
+peanut butter|95|3.5|tbsp|2
+almond butter|98|3.4|tbsp|2
+almonds|165|6|oz|1
+peanuts|160|7|oz|1
+trail mix|140|4|oz|1
+avocado|240|3|each|1
+guacamole|50|0.6|serving|2
+hummus|25|1.2|tbsp|2
+olive oil|120|0|tbsp|1
+butter|100|0|tbsp|1
+burrito bowl|800|45|each|1
+chipotle bowl|800|45|each|1
+chipotle|800|45|each|1
+burrito|1000|40|each|1
+cheeseburger|550|28|each|1
+hamburger|450|25|each|1
+burger|450|25|each|1
+pizza|285|12|slice|2
+chicken sandwich|500|30|each|1
+sandwich|400|20|each|1
+sub|600|30|each|1
+taco|200|9|each|3
+wrap|450|25|each|1
+wings|72|6.7|each|6
+sushi roll|300|9|each|2
+sushi|300|9|roll|2
+caesar salad|400|12|each|1
+salad|250|8|each|1
+soup|180|8|cup|1
+chili|280|20|cup|1
+stir fry|450|30|each|1
+pancakes|175|5|each|3
+pancake|175|5|each|3
+waffle|220|6|each|2
+french toast|150|5|slice|2
+banana|105|1.3|each|1
+apple|95|0.5|each|1
+orange|65|1.2|each|1
+berries|60|1|cup|1
+blueberries|85|1.1|cup|1
+strawberries|50|1|cup|1
+grapes|105|1.1|cup|1
+broccoli|55|3.7|cup|1
+spinach|7|0.9|cup|2
+salad greens|10|1|cup|2
+vegetables|50|2|cup|1
+corn|130|5|cup|1
+granola bar|190|4|each|1
+granola|300|9|cup|1
+chips|150|2|oz|1
+crackers|130|2|oz|1
+cookie|160|2|each|2
+brownie|240|3|each|1
+donut|250|3|each|1
+ice cream|275|5|cup|1
+candy bar|250|4|each|1
+gatorade|140|0|each|1
+soda|150|0|each|1
+orange juice|110|2|cup|1
+juice|115|1|cup|1
+beer|150|1.6|each|1
+wine|125|0|glass|1
+latte|190|10|each|1
+coffee|5|0|each|1`;
+const FOODS=FOOD_TABLE.trim().split('\n').map(r=>{
+  const [n,k,p,u,d]=r.split('|');
+  return {n, k:+k, p:+p, u, d:+d};
+}).sort((a,b)=>b.n.length-a.n.length);
+
+const NUMWORD={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,
+  nine:9,ten:10,twelve:12,dozen:12,half:0.5,couple:2};
+
+function qtyFor(chunk,f){
+  let m=chunk.match(/(\d+(?:\.\d+)?)\s*(oz|ounces?|lbs?|pounds?|cups?|slices?|scoops?|tbsp|tablespoons?|servings?|rolls?|glass(?:es)?|links?)?/);
+  let n=null, unit=null;
+  if(m){ n=parseFloat(m[1]); unit=m[2]||null; }
+  else {
+    const w=chunk.match(/\b(a|an|one|two|three|four|five|six|seven|eight|nine|ten|twelve|dozen|half|couple)\b/);
+    if(w) n=NUMWORD[w[1]];
+  }
+  if(n==null) return f.d;
+  if(unit && /^(lbs?|pounds?)$/.test(unit)) return f.u==='oz' ? n*16 : n;
+  return n;
+}
+
+function findFood(chunk){
+  for(const f of FOODS) if(chunk.includes(f.n)) return f;
+  return null;
+}
+
+function localEstimate(text){
+  const chunks=text.toLowerCase()
+    .replace(/\band\b|\bwith\b|\bplus\b|\balso\b|\+/g,',')
+    .split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
+  let cal=0,pro=0; const hit=[],miss=[];
+  chunks.forEach(ch=>{
+    const f=findFood(ch);
+    if(!f){ if(ch.length>2) miss.push(ch); return }
+    const q=qtyFor(ch,f);
+    cal+=f.k*q; pro+=f.p*q;
+    const qs=(Math.round(q*10)/10);
+    hit.push((f.u==='each'?(qs>1?qs+' ':''):qs+' '+f.u+' ')+f.n);
+  });
+  return {cal:Math.round(cal/10)*10, pro:Math.round(pro), hit, miss};
+}
+
+function runLocal(){
+  const txt=$('#aiTxt').value.trim();
+  if(!txt){ $('#aiTxt').focus(); return }
+  const r=localEstimate(txt);
+  if(!r.hit.length){
+    aiMsg('Did not recognize any of that. Type the numbers below, or add an API key in Settings for open-ended AI.','err');
+    return;
+  }
+  $('#mCal').value=r.cal;
+  $('#mPro').value=r.pro;
+  $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+  $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+  let msg=r.hit.join(' · ');
+  if(r.miss.length) msg+='  —  not recognized: '+r.miss.join(', ')+'. Adjust below.';
+  aiMsg(msg, r.miss.length?'':'ok');
+}
+
+function estimateMeal(){
+  if((S.settings.aiKey||'').trim()) return aiEstimate();
+  return runLocal();
+}
+
 /* ================= AI meal estimate ================= */
 const AI_SCHEMA={
   type:'object',
@@ -715,10 +909,10 @@ async function aiEstimate(){
   }catch(err){
     aiMsg('Could not reach the API. Check your connection.','err');
   }finally{
-    btn.disabled=false; btn.textContent='Estimate with AI';
+    btn.disabled=false; btn.textContent='Estimate';
   }
 }
-$('#aiGo').onclick=aiEstimate;
+$('#aiGo').onclick=estimateMeal;
 
 /* voice: Web Speech where supported; iOS also has the keyboard mic key */
 (function(){
@@ -753,6 +947,9 @@ function openMeal(){
   $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
   $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
   $('#aiTxt').value=''; aiMsg('');
+  $('#aiHint').textContent=(S.settings.aiKey||'').trim()
+    ? 'Using AI · '+((S.settings.aiModel||'').includes('haiku')?'Haiku 4.5':'Opus 5')
+    : 'Free, instant, works offline';
   show('#shMeal');
   setTimeout(()=>$('#aiTxt').focus(),240);
 }
@@ -873,16 +1070,17 @@ function drawSet(){
   s.supps.forEach(x=>{ h+=`<div class="erow"><b>${esc(x.n)}</b><button class="del" data-ds="${x.id}">×</button></div>` });
   h+=`<div class="addrow"><input id="nsN" placeholder="Add supplement"><button id="nsAdd">+</button></div>`;
 
-  h+=`<div class="sect">AI Meal Estimate</div>`;
+  h+=`<div class="sect">Meal Estimate</div>`;
+  h+=`<div class="note" style="border:0;padding:0;margin:2px 0 12px">Estimating runs free on this device using a built-in food list. Adding an Anthropic API key below is optional — it swaps in open-ended AI that understands anything you type, and costs about a tenth of a cent per meal.</div>`;
   h+=`<div class="row" style="display:block;padding-bottom:12px">
-      <span style="display:block;font-size:15px;font-weight:600;margin-bottom:9px">Anthropic API key</span>
+      <span style="display:block;font-size:15px;font-weight:600;margin-bottom:9px">Anthropic API key — optional</span>
       <input class="keyin" type="password" id="aiKeyIn" placeholder="sk-ant-..." value="${esc(s.aiKey||'')}" autocomplete="off" autocapitalize="off" spellcheck="false">
       </div>`;
   h+=`<div class="row"><span>Model</span><div class="pills" style="margin:0;flex:0 0 auto">
       <button class="pill ${s.aiModel!=='claude-haiku-4-5'?'on':''}" data-am="claude-opus-5" style="padding:9px 13px;flex:0 0 auto">Opus 5</button>
       <button class="pill ${s.aiModel==='claude-haiku-4-5'?'on':''}" data-am="claude-haiku-4-5" style="padding:9px 13px;flex:0 0 auto">Haiku</button>
       </div></div>`;
-  h+=`<div class="note" style="border:0;padding:0;margin-top:11px">Opus 5 is the most accurate. Haiku 4.5 is faster and cheaper per estimate. Your key is stored only on this device and goes straight to Anthropic.</div>`;
+  h+=`<div class="note" style="border:0;padding:0;margin-top:11px">Only used when a key is set. Haiku 4.5 is faster and cheaper; Opus 5 is more accurate. Your key is stored only on this device and goes straight to Anthropic.</div>`;
 
   h+=`<div class="sect">Data</div>`;
   h+=`<button class="go alt" id="exp">Export backup (.json)</button>`;
