@@ -98,6 +98,20 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .sup.on{background:var(--blue-w);border-color:rgba(51,163,212,.42);color:var(--blue)}
 .sup.on .box{background:var(--blue);border-color:var(--blue)}
 .sup.on .box svg{opacity:1}
+
+/* habits */
+.hlist{margin-top:10px;display:flex;flex-direction:column}
+.hab{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;color:var(--tx);text-align:left;width:100%}
+.hab:last-child{border-bottom:0;padding-bottom:2px}
+.hab .box{width:21px;height:21px}
+.hab span{position:relative;flex:1;min-width:0;transition:color .3s}
+.hab span::after{content:'';position:absolute;left:0;top:52%;height:1.5px;width:0;background:currentColor;transition:width .35s cubic-bezier(.22,1,.36,1)}
+.hab.on span{color:var(--mu2)}
+.hab.on span::after{width:100%}
+.hab.on .box{background:var(--blue);border-color:var(--blue)}
+.hab.on .box svg{opacity:1}
+.hab.pop .box{animation:pop .5s var(--spring)}
+.hab.pop.on .box svg path{stroke-dasharray:24;stroke-dashoffset:24;animation:tick .4s var(--ease) .1s forwards}
 .link{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.2px}
 
 /* todo */
@@ -283,7 +297,8 @@ const DEF={
     sleepMin:8,
     startWeight:170,
     gainMin:0.25, gainMax:0.5, gainCut:0.75,
-    supps:[{id:'s1',n:'Creatine'},{id:'s2',n:'Omega 3'},{id:'s3',n:'Vitamin D'},{id:'s4',n:'Magnesium'}]
+    supps:[{id:'s1',n:'Creatine'},{id:'s2',n:'Omega 3'},{id:'s3',n:'Vitamin D'},{id:'s4',n:'Magnesium'}],
+    habits:['Wake Up Early (5-7am)','Morning Routine','Gratitude (5min)','Listen/Read News','Use Health Tracking App','Spend Less Time on Phone (Under 2hrs)','Read for 15min','Purity','Time Outdoor and in the Sun','Night Routine','Go To Bed Early (9-11pm)'].map((n,i)=>({id:'h'+(i+1),n}))
   },
   days:{}, weekSeen:null
 };
@@ -314,6 +329,7 @@ const isToday=()=>VIEW===TODAY();
 function day(k){
   if(!S.days[k]) S.days[k]={supps:{}};
   S.days[k].supps=S.days[k].supps||{};
+  S.days[k].habits=S.days[k].habits||{};
   return S.days[k];
 }
 const V=()=>day(VIEW);
@@ -323,6 +339,7 @@ const nf=n=>Math.round(n).toLocaleString();
 const cupsTotal=()=>Math.ceil(S.settings.water/S.settings.cup);
 const waterOz=d=>(+d.cups||0)*S.settings.cup;
 const waterDone=d=>waterOz(d)>=S.settings.water;
+const habitsDone=d=>S.settings.habits.filter(x=>(d.habits||{})[x.id]).length;
 const suppsDone=d=>S.settings.supps.length>0 && S.settings.supps.every(x=>d.supps[x.id]);
 
 function score(d){
@@ -373,6 +390,7 @@ const I={
   water:SV('<path d="M12 3.2c3.5 4.2 6 7.5 6 10.6a6 6 0 0 1-12 0c0-3.1 2.5-6.4 6-10.6z"/>'),
   supp: SV('<rect x="3" y="9" width="18" height="6.5" rx="3.25"/><path d="M12 9v6.5"/>'),
   wt:   SV('<circle cx="12" cy="12" r="8.5"/><path d="M12 12l4-3"/>'),
+  habit:SV('<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M8 12.3l2.8 2.8L16.2 9.5"/>'),
   list: SV('<path d="M8 6h12M8 12h12M8 18h12M3.6 6h.01M3.6 12h.01M3.6 18h.01"/>')
 };
 
@@ -431,6 +449,21 @@ function render(){
   });
   h+=`</div></div>`;
 
+  /* daily habits */
+  if(s.habits.length){
+    const hd=habitsDone(d);
+    h+=`<div class="card">
+      <div class="rowtop">
+        <div class="chead" style="margin:0"><i class="chip ${hd===s.habits.length?'b':''}">${I.habit}</i><div class="lbl">Daily Habits</div></div>
+        <div class="of ${hd===s.habits.length?'done':''}">${hd} / ${s.habits.length}</div>
+      </div>
+      <div class="hlist">`;
+    s.habits.forEach(x=>{
+      h+=`<button class="hab ${d.habits[x.id]?'on':''} ${POP==='h'+x.id?'pop':''}" data-a="hab" data-id="${x.id}"><i class="box">${ICO_CHK}</i><span>${esc(x.n)}</span></button>`;
+    });
+    h+=`</div></div>`;
+  }
+
   /* still to do (today only) */
   if(isToday()){
     const todo=[];
@@ -438,6 +471,8 @@ function render(){
     if(d.sleep==null)  todo.push(`Log <b>sleep</b>`);
     if(!waterDone(d)) todo.push(`Drink <b>${tot-n} more ${tot-n===1?'glass':'glasses'}</b> of water`);
     if(!suppsDone(d)) todo.push(`Take <b>${s.supps.filter(x=>!d.supps[x.id]).map(x=>esc(x.n)).join(', ')||'supplements'}</b>`);
+    const hl=s.habits.length-habitsDone(d);
+    if(hl>0) todo.push(`Finish <b>${hl} more ${hl===1?'habit':'habits'}</b>`);
     h+=`<div class="card ${todo.length?'hot':''}"><div class="chead"><i class="chip ${todo.length?'':'b'}">${I.list}</i><div class="lbl">Still to do</div></div>`;
     h+= todo.length ? `<ul class="todo">${todo.map(x=>`<li>${x}</li>`).join('')}</ul>`
                     : `<div class="clear">Everything handled</div>`;
@@ -530,7 +565,7 @@ $('#sSave').onclick=()=>{
 /* ================= weekly ================= */
 function openWeek(){
   const s=S.settings;
-  let watHit=0,supTot=0,supDone=0,slSum=0,slN=0,strip='';
+  let habTot=0,habDone=0,watHit=0,supTot=0,supDone=0,slSum=0,slN=0,strip='';
   for(let i=6;i>=0;i--){
     const k=backDays(i), d=S.days[k], dt=asDate(k);
     const sc=d?score(d):{n:0,t:4};
@@ -541,6 +576,9 @@ function openWeek(){
     d.supps=d.supps||{};
     if(waterDone(d)) watHit++;
     if(d.sleep!=null){ slSum+=+d.sleep; slN++ }
+    d.habits=d.habits||{};
+    habTot+=s.habits.length;
+    habDone+=s.habits.filter(x=>d.habits[x.id]).length;
     supTot+=s.supps.length;
     supDone+=s.supps.filter(x=>d.supps[x.id]).length;
   }
@@ -552,6 +590,7 @@ function openWeek(){
   h+=row('Average sleep', slN?(slSum/slN).toFixed(1)+' h':'-');
   h+=row('Water goal hit', watHit+' / 7 days');
   h+=row('Supplements taken', supTot?Math.round(supDone/supTot*100)+'%':'-');
+  h+=row('Habits done', habTot?Math.round(habDone/habTot*100)+'%':'-');
   h+=`<div class="verdict">${advice(t)}</div>`;
   $('#weekBody').innerHTML=h;
   S.weekSeen=TODAY(); save(); render();
@@ -578,6 +617,10 @@ function drawSet(){
   s.supps.forEach(x=>{ h+=`<div class="erow"><b>${esc(x.n)}</b><button class="del" data-ds="${x.id}">×</button></div>` });
   h+=`<div class="addrow"><input id="nsN" placeholder="Add supplement"><button id="nsAdd">+</button></div>`;
 
+  h+=`<div class="sect">Daily habits</div>`;
+  s.habits.forEach(x=>{ h+=`<div class="erow"><b>${esc(x.n)}</b><button class="del" data-dh="${x.id}">×</button></div>` });
+  h+=`<div class="addrow"><input id="nhN" placeholder="Add habit"><button id="nhAdd">+</button></div>`;
+
   h+=`<div class="sect">Data</div>`;
   h+=`<button class="go alt" id="exp">Export backup (.json)</button>`;
   h+=`<button class="go alt" id="imp">Import backup</button>`;
@@ -591,6 +634,13 @@ function drawSet(){
   $('#setBody').querySelectorAll('[data-ds]').forEach(b=>b.onclick=()=>{
     S.settings.supps=S.settings.supps.filter(x=>x.id!==b.dataset.ds); save(); drawSet(); render();
   });
+  $('#setBody').querySelectorAll('[data-dh]').forEach(b=>b.onclick=()=>{
+    S.settings.habits=S.settings.habits.filter(x=>x.id!==b.dataset.dh); save(); drawSet(); render();
+  });
+  $('#nhAdd').onclick=()=>{
+    const n=$('#nhN').value.trim(); if(!n) return;
+    S.settings.habits.push({id:'h'+Date.now(),n}); save(); drawSet(); render();
+  };
   $('#nsAdd').onclick=()=>{
     const n=$('#nsN').value.trim(); if(!n) return;
     S.settings.supps.push({id:'s'+Date.now(),n}); save(); drawSet(); render();
@@ -628,6 +678,7 @@ app.addEventListener('click',e=>{
     POP='c'+i;
     save(); render();
   }
+  else if(a==='hab'){ d.habits[el.dataset.id]=!d.habits[el.dataset.id]; POP='h'+el.dataset.id; save(); render() }
   else if(a==='supp'){ d.supps[el.dataset.id]=!d.supps[el.dataset.id]; POP='s'+el.dataset.id; save(); render() }
   else if(a==='suppall'){
     const k=VIEW, before={...d.supps};
