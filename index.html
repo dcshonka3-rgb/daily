@@ -60,7 +60,7 @@ button:active{transform:scale(.96)}
 .mark .dp{fill:#33a3d4;fill-opacity:0;stroke:#ff8a3c;stroke-width:4;stroke-linejoin:round;stroke-dasharray:200;stroke-dashoffset:200;transform-origin:56px 62px;animation:draw .9s var(--ease) .1s forwards, fillIn .45s var(--ease) .75s forwards, bob .6s var(--spring) .75s}
 .word{font:600 28px/1 -apple-system,"SF Pro Display",sans-serif;letter-spacing:-.6px;opacity:0;transform:translateY(8px);animation:rise .7s var(--ease) .45s forwards;
   background:linear-gradient(100deg,#f2f7fb 30%,#8ad9f5 50%,#f2f7fb 70%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
-.word.go{animation:rise .7s var(--ease) .45s forwards, sweep 1.6s var(--ease) .7s}
+.word.shim{animation:rise .7s var(--ease) .45s forwards, sweep 1.6s var(--ease) .7s}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes fillIn{to{fill-opacity:1}}
 @keyframes bob{0%{transform:scale(1)}40%{transform:scale(.92)}100%{transform:scale(1)}}
@@ -213,7 +213,7 @@ header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:2px;
   <div class="mark"><svg viewBox="0 0 112 112">
     <path class="dp" d="M56 14 C70 33 85 49 85 67 A29 29 0 0 1 27 67 C27 49 42 33 56 14Z"/>
   </svg></div>
-  <div class="word go">Health</div>
+  <div class="word shim">Health</div>
 </div>
 </div>
 
