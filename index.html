@@ -67,44 +67,6 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .chip.b{background:var(--blue-w);color:var(--blue)}
 .chip svg{width:14px;height:14px}
 
-/* ring */
-.ringrow{display:flex;align-items:center;gap:18px;margin:14px 0 4px}
-.ring{position:relative;width:118px;height:118px;flex:0 0 auto}
-.ring svg{width:118px;height:118px;transform:rotate(-90deg)}
-.ring .trk{fill:none;stroke:var(--card2);stroke-width:10}
-.ring .prg{fill:none;stroke:var(--or);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .45s ease}
-.ring.hit .prg{stroke:var(--blue)}
-.rc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
-.rc b{font-size:27px;font-weight:800;letter-spacing:-1px;line-height:1}
-.rc s{text-decoration:none;font-size:10px;font-weight:800;letter-spacing:1.3px;color:var(--mu2)}
-.ring.hit .rc b{color:var(--blue)}
-.rside{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
-.rstat em{display:block;font-style:normal;font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--mu2)}
-.rstat b{font-size:19px;font-weight:800;letter-spacing:-.5px}
-.rstat b span{font-size:12px;font-weight:600;color:var(--mu)}
-
-/* bars */
-.of{font-size:13.5px;font-weight:600;color:var(--mu);white-space:nowrap}
-.bar{height:9px;border-radius:9px;background:var(--card2);overflow:hidden}
-.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--or),#ffb474);transition:width .35s ease}
-.bar.b i{background:linear-gradient(90deg,var(--blue),#8ad9f5)}
-.hr{height:1px;background:var(--line);margin:18px 0 14px}
-.sub{display:flex;align-items:baseline;justify-content:space-between;margin:9px 0 10px}
-.sub b{font-size:22px;font-weight:800;letter-spacing:-.6px}
-.sub b s{text-decoration:none;font-size:12.5px;font-weight:600;color:var(--mu);margin-left:5px}
-.done{color:var(--blue)}
-.empty{font-size:13px;color:var(--mu2);font-weight:600;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);text-align:center}
-
-/* log button */
-.log{width:100%;padding:17px;border-radius:var(--r);background:var(--or);color:#0d1a13;font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:10px;transition:transform .07s}
-.log:active{transform:scale(.985);background:var(--or-d)}
-
-/* entries */
-.ents{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:1px}
-.ent{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:14px;font-weight:600;color:var(--mu)}
-.ent b{flex:1;color:var(--tx);font-weight:600;font-variant-numeric:tabular-nums}
-.ent .x{color:var(--mu2);font-size:20px;line-height:1;padding:2px 2px 4px 10px}
-
 /* 2-up tiles */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .m{background:var(--card);border:1px solid var(--or-b);border-radius:var(--r);padding:15px;text-align:left;min-height:82px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .07s}
@@ -134,14 +96,6 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .sup.on .box svg{opacity:1}
 .link{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.2px}
 
-/* fundamentals */
-.ftiles{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:13px}
-.ft{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;background:var(--card2);border:1.5px solid var(--or-b2);color:var(--or)}
-.ft svg{width:17px;height:17px}
-.ft.on{background:var(--blue);border-color:var(--blue);color:#06141f}
-.cnt{font-size:15px;font-weight:800}
-.cnt s{text-decoration:none;color:var(--mu2);font-weight:700}
-
 /* todo */
 .todo{list-style:none;margin-top:6px}
 .todo li{font-size:15px;padding:9px 0;border-bottom:1px solid var(--line);font-weight:600;color:var(--mu)}
@@ -164,26 +118,6 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .hd .db.p{background:var(--blue-w);color:var(--blue);border-color:rgba(51,163,212,.3)}
 .hd .db.t{outline:1.5px solid var(--or);outline-offset:1px}
 
-
-/* AI estimate */
-.ai{background:var(--card2);border:1.5px solid var(--or-b2);border-radius:14px;padding:13px;margin-bottom:18px}
-.ai .top{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-.ai .top .lbl{flex:1}
-.mic{width:34px;height:34px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;color:var(--or);flex:0 0 auto}
-.mic svg{width:16px;height:16px}
-.mic.rec{background:var(--or);color:#06141f;border-color:var(--or)}
-.ai textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:12px;font-size:16px;font-family:inherit;color:var(--tx);resize:none;min-height:76px;line-height:1.4}
-.ai textarea:focus{outline:0;border-color:var(--or)}
-.ai textarea::placeholder{color:var(--mu2)}
-.est{width:100%;margin-top:9px;padding:13px;border-radius:11px;background:var(--or);color:#0d1a13;font-size:15px;font-weight:800}
-.est:disabled{opacity:.55}
-.est.ghost{background:var(--card);border:1px solid var(--line);color:var(--mu);font-weight:700}
-.aihint{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mu2);text-align:center;margin-top:8px}
-.aimsg{font-size:12.5px;font-weight:600;margin-top:9px;line-height:1.45;color:var(--mu)}
-.aimsg.ok{color:var(--blue)}
-.aimsg.err{color:#ff8a8a}
-.row input.keyin,.keyin{width:100%;text-align:left;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font-size:14px;font-family:ui-monospace,Menlo,monospace}
-.row input.keyin:focus,.keyin:focus{outline:0;border-color:var(--or)}
 
 /* ---------- sheet ---------- */
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:40;display:none}
@@ -237,13 +171,16 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .toast{position:fixed;left:16px;right:16px;bottom:calc(22px + env(safe-area-inset-bottom));max-width:488px;margin:0 auto;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;z-index:60;font-size:15px;font-weight:700;opacity:0;transform:translateY(14px);pointer-events:none;transition:.16s}
 .toast.on{opacity:1;transform:none;pointer-events:auto}
 .toast u{text-decoration:none;color:var(--or);font-weight:800;padding-left:14px}
+
+.of{font-size:13.5px;font-weight:600;color:var(--mu);white-space:nowrap}
+.done{color:var(--blue)}
 </style>
 </head>
 <body>
 
 <header>
   <button class="nav" id="prev" aria-label="Previous day"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-  <div class="ttl"><h1 id="title">TODAY</h1><small id="date">—</small></div>
+  <div class="ttl"><h1 id="title">TODAY</h1><small id="date">-</small></div>
   <button class="nav" id="next" aria-label="Next day"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
   <div class="sp"></div>
   <button class="ico" id="btnWeek" aria-label="Weekly review"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 20V11M12 20V4M18 20v-6"/></svg></button>
@@ -253,36 +190,6 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 <div id="app"></div>
 
 <div class="scrim" id="scrim"></div>
-
-<!-- meal -->
-<div class="sheet" id="shMeal">
-  <div class="handle"></div>
-  <div class="sh"><h2>Log Meal</h2><button class="x2 close">Close</button></div>
-
-  <div class="ai">
-    <div class="top">
-      <div class="lbl">What did you eat?</div>
-      <button class="mic hide" id="micBtn" aria-label="Voice input"></button>
-    </div>
-    <textarea id="aiTxt" rows="3" autocapitalize="sentences"
-      placeholder="chipotle chicken bowl with guac, and a protein shake"></textarea>
-    <button class="est" id="aiGo">Estimate</button>
-    <div class="aihint" id="aiHint">Free, instant, works offline</div>
-    <div class="aimsg hide" id="aiMsg"></div>
-  </div>
-
-  <div class="f">
-    <label class="lbl">Calories</label>
-    <input class="num" id="mCal" type="number" inputmode="numeric" placeholder="0">
-    <div class="pills" id="mCalP"></div>
-  </div>
-  <div class="f">
-    <label class="lbl">Protein (g)</label>
-    <input class="num" id="mPro" type="number" inputmode="numeric" placeholder="0">
-    <div class="pills" id="mProP"></div>
-  </div>
-  <button class="go" id="mSave">Add</button>
-</div>
 
 <!-- weight -->
 <div class="sheet" id="shWeight">
@@ -308,11 +215,6 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
     <input class="num" id="sVal" type="number" inputmode="decimal" step="0.25" placeholder="0">
     <div class="pills" id="sPills"></div>
   </div>
-  <div class="f">
-    <label class="lbl">Apple Watch sleep score — optional</label>
-    <input class="num" id="sScore" type="number" inputmode="numeric" placeholder="—">
-    <div class="pills" id="sScoreP"></div>
-  </div>
   <button class="go" id="sSave">Save</button>
 </div>
 
@@ -337,10 +239,9 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 const KEY='daily.v3';
 const DEF={
   settings:{
-    cal:3700, pro:180,
     water:120, cup:18,
-    sleep:8.5, sleepMin:8, sleepScore:85,
-    height:"5'10\"", startWeight:170,
+    sleepMin:8,
+    startWeight:170,
     gainMin:0.25, gainMax:0.5, gainCut:0.75,
     supps:[{id:'s1',n:'Creatine'},{id:'s2',n:'Omega 3'},{id:'s3',n:'Vitamin D'},{id:'s4',n:'Magnesium'}]
   },
@@ -362,7 +263,7 @@ function save(){ localStorage.setItem(KEY,JSON.stringify(S)) }
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const TODAY=()=>fmt(new Date());
-function shift(key,n){ const [y,m,dd]=key.split('-').map(Number); const d=new Date(y,m-1,dd+n); return fmt(d) }
+function shift(key,n){ const [y,m,dd]=key.split('-').map(Number); return fmt(new Date(y,m-1,dd+n)) }
 function backDays(n){ return shift(TODAY(),-n) }
 function asDate(k){ const [y,m,d]=k.split('-').map(Number); return new Date(y,m-1,d) }
 function daysBetween(a,b){ return Math.round((asDate(b)-asDate(a))/864e5) }
@@ -371,33 +272,23 @@ let VIEW=TODAY();
 const isToday=()=>VIEW===TODAY();
 
 function day(k){
-  if(!S.days[k]) S.days[k]={e:[],supps:{}};
-  const d=S.days[k]; d.e=d.e||[]; d.supps=d.supps||{};
-  return d;
+  if(!S.days[k]) S.days[k]={supps:{}};
+  S.days[k].supps=S.days[k].supps||{};
+  return S.days[k];
 }
 const V=()=>day(VIEW);
 
 /* ================= calc ================= */
-const cals=d=>d.e.reduce((t,x)=>t+(+x.c||0),0);
-const pros=d=>d.e.reduce((t,x)=>t+(+x.p||0),0);
 const nf=n=>Math.round(n).toLocaleString();
 const cupsTotal=()=>Math.ceil(S.settings.water/S.settings.cup);
 const waterOz=d=>(+d.cups||0)*S.settings.cup;
 const waterDone=d=>waterOz(d)>=S.settings.water;
 const suppsDone=d=>S.settings.supps.length>0 && S.settings.supps.every(x=>d.supps[x.id]);
 
-function fundamentals(d){
-  const s=S.settings;
-  return [
-    {k:'Calories', ok: cals(d)>=s.cal*0.95},
-    {k:'Protein',  ok: pros(d)>=s.pro},
-    {k:'Sleep',    ok: (+d.sleep||0)>=s.sleepMin},
-    {k:'Water',    ok: waterDone(d)},
-    {k:'Supplements', ok: suppsDone(d)},
-    {k:'Weight',   ok: d.weight!=null}
-  ];
+function score(d){
+  const f=[(+d.sleep||0)>=S.settings.sleepMin, waterDone(d), suppsDone(d), d.weight!=null];
+  return {n:f.filter(Boolean).length, t:f.length};
 }
-function score(d){ const f=fundamentals(d); return {n:f.filter(x=>x.ok).length, t:f.length} }
 
 function weights(offset,n){
   const out=[];
@@ -420,19 +311,12 @@ function trend(){
   else if(rate>s.gainMax) status='high';
   return {avg:av, rate, status};
 }
-function flatStall(){
-  const a=avg(weights(0,7)), c=avg(weights(14,7));
-  if(a==null||c==null) return false;
-  return (a-c)<S.settings.gainMin*1.4;
-}
 function advice(t){
   if(t.status==='need') return 'Not enough weigh-ins yet. Log weight most mornings and this fills in.';
-  if(t.status==='target') return 'Keep calories the same.';
-  if(t.status==='fast') return 'Consider decreasing daily calories by about 200.';
-  if(t.status==='high') return 'Slightly above target. Hold intake and reassess next week.';
-  return flatStall()
-    ? 'Your 7-day average has been flat for two weeks. Consider increasing daily calories by about 200.'
-    : 'Consider increasing daily calories by about 200.';
+  if(t.status==='target') return 'On track. Keep eating the same.';
+  if(t.status==='fast') return 'Gaining too fast. Eat a little less.';
+  if(t.status==='high') return 'Slightly above target. Hold steady and reassess next week.';
+  return 'Gaining too slowly. Eat a little more.';
 }
 function lastWeight(before){
   for(let i=1;i<=30;i++){
@@ -443,21 +327,14 @@ function lastWeight(before){
 }
 
 /* ================= icons ================= */
-const ICO_DROP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3.2c3.5 4.2 6 7.5 6 10.6a6 6 0 0 1-12 0c0-3.1 2.5-6.4 6-10.6z"/></svg>';
-const ICO_MIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>';
-const ICO_CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg>';
 const SV=p=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+const ICO_CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5.5 5.5L20 6.5"/></svg>';
 const I={
-  cal:  SV('<path d="M13 2L4.5 13.5H11l-1 8.5 8.5-11.5H12L13 2z"/>'),
-  pro:  SV('<path d="M4 9v6M7.5 6.5v11M16.5 6.5v11M20 9v6M7.5 12h9"/>'),
-  sleep:SV('<path d="M20.5 14.7A8.6 8.6 0 1 1 9.3 3.5a6.7 6.7 0 0 0 11.2 11.2z"/>'),
   water:SV('<path d="M12 3.2c3.5 4.2 6 7.5 6 10.6a6 6 0 0 1-12 0c0-3.1 2.5-6.4 6-10.6z"/>'),
   supp: SV('<rect x="3" y="9" width="18" height="6.5" rx="3.25"/><path d="M12 9v6.5"/>'),
   wt:   SV('<circle cx="12" cy="12" r="8.5"/><path d="M12 12l4-3"/>'),
-  list: SV('<path d="M8 6h12M8 12h12M8 18h12M3.6 6h.01M3.6 12h.01M3.6 18h.01"/>'),
-  star: SV('<path d="M12 3.5l2.6 5.6 6 .8-4.4 4.2 1.1 6.1L12 17.3l-5.3 2.9 1.1-6.1L3.4 9.9l6-.8L12 3.5z"/>')
+  list: SV('<path d="M8 6h12M8 12h12M8 18h12M3.6 6h.01M3.6 12h.01M3.6 18h.01"/>')
 };
-const FICO=[I.cal,I.pro,I.sleep,I.water,I.supp,I.wt];
 
 /* ================= render ================= */
 const $=s=>document.querySelector(s);
@@ -465,15 +342,9 @@ const app=$('#app');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function render(){
-  const d=V(), s=S.settings;
-  const c=cals(d), p=pros(d);
-  const cLeft=s.cal-c, pLeft=s.pro-p;
-  const f=fundamentals(d), nDone=f.filter(x=>x.ok).length;
-  const t=trend();
+  const d=V(), s=S.settings, t=trend();
 
-  /* header */
-  const dt=asDate(VIEW);
-  const diff=daysBetween(VIEW,TODAY());
+  const dt=asDate(VIEW), diff=daysBetween(VIEW,TODAY());
   $('#title').textContent = diff===0?'TODAY' : diff===1?'YESTERDAY' : dt.toLocaleDateString(undefined,{weekday:'long'}).toUpperCase();
   const hr=new Date().getHours();
   const greet = hr<12?'Good morning' : hr<18?'Good afternoon' : 'Good evening';
@@ -481,48 +352,16 @@ function render(){
   $('#next').disabled = isToday();
 
   let h='';
-
   if(!isToday())
     h+=`<div class="past">Viewing a past day<button class="link" data-a="today">BACK TO TODAY</button></div>`;
   else if(S.weekSeen!==TODAY() && (S.weekSeen==null || daysBetween(S.weekSeen,TODAY())>=7) && Object.keys(S.days).length>=7)
     h+=`<div class="past">Weekly review ready<button class="link" data-a="week">VIEW</button></div>`;
 
-  /* macros */
-  const C=2*Math.PI*52;
-  const pct=Math.min(1,c/s.cal);
-  h+=`<div class="card">
-    <div class="chead"><i class="chip">${I.cal}</i><div class="lbl">Calories</div></div>
-    <div class="ringrow">
-      <div class="ring ${cLeft<=0?'hit':''}">
-        <svg viewBox="0 0 118 118">
-          <circle class="trk" cx="59" cy="59" r="52"/>
-          <circle class="prg" cx="59" cy="59" r="52" style="stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${(C*(1-pct)).toFixed(1)}"/>
-        </svg>
-        <div class="rc"><b>${nf(Math.abs(cLeft))}</b><s>${cLeft>0?'LEFT':'OVER'}</s></div>
-      </div>
-      <div class="rside">
-        <div class="rstat"><em>EATEN</em><b>${nf(c)} <span>cal</span></b></div>
-        <div class="rstat"><em>GOAL</em><b>${nf(s.cal)} <span>cal</span></b></div>
-      </div>
-    </div>
-    <div class="hr"></div>
-    <div class="chead"><i class="chip b">${I.pro}</i><div class="lbl">Protein</div></div>
-    <div class="sub">
-      <b class="${pLeft<=0?'done':''}">${nf(Math.abs(pLeft))}g<s>${pLeft>0?'left':'over'}</s></b>
-      <div class="of">${nf(p)}g / ${nf(s.pro)}g</div>
-    </div>
-    <div class="bar b"><i style="width:${Math.min(100,p/s.pro*100)}%"></i></div>
-    ${d.e.length?entriesHTML(d):`<div class="empty">No meals logged yet</div>`}
-  </div>`;
-
-  h+=`<button class="log" data-a="meal">+ Log Meal</button>`;
-
   /* weight + sleep */
   const wTxt = d.weight!=null ? d.weight.toFixed(1)+' lb' : 'Log';
   const wSub = t.avg!=null ? '7-day avg '+t.avg.toFixed(1) : 'tap to add';
   const slTxt = d.sleep!=null ? (+d.sleep)+' h' : 'Log';
-  const slSub = d.score!=null ? 'score '+d.score+' / '+s.sleepScore
-             : (d.sleep!=null ? 'goal '+s.sleep+' h' : 'tap to add');
+  const slSub = d.sleep!=null ? 'goal '+s.sleepMin+' h' : 'tap to add';
   h+=`<div class="g2">
     <button class="m" data-a="weight"><div class="lbl">Weight</div><div class="v ${d.weight!=null?'':'e'}">${wTxt}</div><div class="s">${wSub}</div></button>
     <button class="m" data-a="sleep"><div class="lbl">Sleep</div><div class="v ${d.sleep!=null?((+d.sleep>=s.sleepMin)?'g':''):'e'}">${slTxt}</div><div class="s">${slSub}</div></button>
@@ -536,7 +375,7 @@ function render(){
       <div class="of ${waterDone(d)?'done':''}">${nf(waterOz(d))} / ${nf(s.water)} oz</div>
     </div>
     <div class="cups">`;
-  for(let i=0;i<tot;i++) h+=`<button class="cup ${i<n?'on':''}" data-a="cup" data-i="${i}" aria-label="${(i+1)*s.cup} oz">${ICO_DROP}</button>`;
+  for(let i=0;i<tot;i++) h+=`<button class="cup ${i<n?'on':''}" data-a="cup" data-i="${i}" aria-label="${(i+1)*s.cup} oz">${I.water}</button>`;
   h+=`</div></div>`;
 
   /* supplements */
@@ -552,24 +391,13 @@ function render(){
   });
   h+=`</div></div>`;
 
-  /* fundamentals */
-  h+=`<div class="card">
-    <div class="rowtop">
-      <div class="chead" style="margin:0"><i class="chip ${nDone===f.length?'b':''}">${I.star}</i><div class="lbl">Daily Fundamentals</div></div>
-      <div class="cnt">${nDone}<s> / ${f.length}</s></div>
-    </div>
-    <div class="ftiles">${f.map((x,i)=>`<i class="ft ${x.ok?'on':''}" title="${x.k}">${FICO[i]}</i>`).join('')}</div>
-  </div>`;
-
-  /* still to do — today only */
+  /* still to do (today only) */
   if(isToday()){
     const todo=[];
-    if(cLeft>60) todo.push(`Eat about <b>${nf(cLeft)} more calories</b>`);
-    if(pLeft>4)  todo.push(`Get <b>${nf(pLeft)}g more protein</b>`);
-    if(!waterDone(d)) todo.push(`Drink <b>${tot-n} more ${tot-n===1?'glass':'glasses'}</b> of water`);
-    if(!suppsDone(d)) todo.push(`Take <b>${s.supps.filter(x=>!d.supps[x.id]).map(x=>esc(x.n)).join(', ')||'supplements'}</b>`);
     if(d.weight==null) todo.push(`Log <b>weight</b>`);
     if(d.sleep==null)  todo.push(`Log <b>sleep</b>`);
+    if(!waterDone(d)) todo.push(`Drink <b>${tot-n} more ${tot-n===1?'glass':'glasses'}</b> of water`);
+    if(!suppsDone(d)) todo.push(`Take <b>${s.supps.filter(x=>!d.supps[x.id]).map(x=>esc(x.n)).join(', ')||'supplements'}</b>`);
     h+=`<div class="card ${todo.length?'hot':''}"><div class="chead"><i class="chip ${todo.length?'':'b'}">${I.list}</i><div class="lbl">Still to do</div></div>`;
     h+= todo.length ? `<ul class="todo">${todo.map(x=>`<li>${x}</li>`).join('')}</ul>`
                     : `<div class="clear">Everything handled</div>`;
@@ -589,12 +417,6 @@ function render(){
   }
 
   app.innerHTML=h;
-}
-
-function entriesHTML(d){
-  return `<div class="ents">`+d.e.map(x=>
-    `<div class="ent"><b>${nf(x.c)} cal · ${nf(x.p)}g</b><button class="x" data-a="rm" data-id="${x.id}">×</button></div>`
-  ).join('')+`</div>`;
 }
 
 /* ================= toast ================= */
@@ -622,636 +444,9 @@ function closeSheet(){
 $('#scrim').onclick=closeSheet;
 document.querySelectorAll('.close').forEach(b=>b.onclick=closeSheet);
 
-function pills(el,vals,onPick,fmtV){
-  el.innerHTML=vals.map(v=>`<button class="pill" data-v="${v}">${fmtV?fmtV(v):v}</button>`).join('');
-  el.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{
-    el.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-    onPick(+b.dataset.v);
-  });
-}
-const markPill=(el,v)=>el.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',+b.dataset.v===+v));
-
-/* ================= free offline meal estimator ================= */
-const FOOD_TABLE=`
-chicken breast|47|8.7|oz|6
-grilled chicken|47|8.7|oz|6
-baked chicken|47|8.7|oz|6
-fried chicken|80|6.5|oz|6
-chicken thigh|60|6.5|oz|5
-chicken tender|90|7|each|3
-chicken strip|90|7|each|3
-chicken nugget|47|2.5|each|8
-rotisserie chicken|55|7|oz|6
-ground chicken|43|7.5|oz|6
-shredded chicken|47|8.7|oz|6
-chicken wing|72|6.7|each|6
-boneless wing|60|4.5|each|8
-chicken|47|8.7|oz|6
-ground turkey|47|7.7|oz|6
-turkey breast|33|7.7|oz|5
-deli turkey|30|5.5|oz|4
-turkey|33|7.7|oz|5
-deli ham|35|5|oz|4
-ham|35|5|oz|4
-roast beef|45|7.5|oz|5
-lean ground beef|48|7.5|oz|6
-ground beef|60|6.4|oz|6
-ribeye|75|7|oz|8
-sirloin|55|8|oz|8
-filet mignon|60|8|oz|7
-new york strip|65|7.5|oz|8
-flank steak|55|8|oz|8
-skirt steak|60|7.8|oz|8
-brisket|80|6.5|oz|6
-prime rib|85|6.5|oz|8
-pot roast|500|45|each|1
-steak|68|7.3|oz|8
-short ribs|95|6|oz|6
-ribs|90|6|oz|8
-pork chop|60|7|oz|6
-pork tenderloin|40|7.5|oz|6
-pulled pork|65|6.5|oz|5
-pork belly|145|3|oz|4
-pork|60|7|oz|6
-turkey bacon|30|2.5|slice|3
-bacon|43|3|slice|3
-breakfast sausage|85|5|link|2
-italian sausage|230|13|link|1
-bratwurst|280|12|each|1
-chorizo|130|7|oz|3
-sausage|85|5|link|2
-hot dog|150|5|each|2
-pepperoni|140|6|oz|1
-salami|110|6|oz|1
-prosciutto|70|8|oz|1
-lamb|70|7|oz|6
-veal|55|8|oz|6
-venison|45|8|oz|6
-bison|40|8|oz|6
-duck|100|5.5|oz|5
-meatball|60|3|each|4
-meatloaf|290|20|each|1
-beef jerky|80|13|oz|1
-jerky|80|13|oz|1
-grilled salmon|58|6.3|oz|6
-smoked salmon|33|5.2|oz|3
-salmon|58|6.3|oz|6
-canned tuna|33|7|oz|5
-ahi tuna|35|7.5|oz|6
-tuna|33|7|oz|5
-tilapia|36|7.4|oz|6
-cod|24|5.3|oz|6
-halibut|31|6.5|oz|6
-mahi mahi|30|6.5|oz|6
-swordfish|40|6.8|oz|6
-trout|47|6.5|oz|6
-sardines|60|7|oz|3
-anchovies|60|8|oz|1
-shrimp|28|6|oz|5
-crab|25|5.5|oz|5
-lobster|26|5.5|oz|5
-scallops|30|5.7|oz|5
-mussels|40|5.5|oz|5
-clams|30|5|oz|5
-oysters|20|2.3|each|6
-calamari|50|4.5|oz|5
-fish stick|60|3|each|5
-fish and chips|850|35|each|1
-sashimi|40|8|oz|4
-poke bowl|600|35|each|1
-scrambled eggs|90|6.3|each|3
-hard boiled egg|78|6.3|each|2
-fried egg|90|6.3|each|2
-egg whites|17|3.6|each|4
-egg white|17|3.6|each|4
-omelette|300|20|each|1
-omelet|300|20|each|1
-eggs|72|6.3|each|2
-egg|72|6.3|each|2
-nonfat greek yogurt|130|23|cup|1
-greek yogurt|150|20|cup|1
-skyr|130|23|cup|1
-cottage cheese|200|25|cup|1
-frozen yogurt|220|6|cup|1
-yogurt|140|8|cup|1
-chocolate milk|210|8|cup|1
-whole milk|150|8|cup|1
-almond milk|40|1|cup|1
-oat milk|120|3|cup|1
-soy milk|105|7|cup|1
-skim milk|90|8|cup|1
-milk|130|8|cup|1
-heavy cream|100|0.6|tbsp|2
-half and half|20|0.5|tbsp|2
-sour cream|30|0.5|tbsp|2
-cream cheese|50|1|tbsp|2
-whipped cream|25|0.2|tbsp|2
-string cheese|80|7|each|1
-american cheese|105|5|slice|1
-mozzarella|85|6.3|oz|1
-parmesan|22|2|tbsp|2
-cheddar|115|7|oz|1
-provolone|100|7.3|slice|1
-swiss|108|7.6|oz|1
-feta|75|4|oz|1
-goat cheese|75|5|oz|1
-blue cheese|100|6|oz|1
-queso|120|5|oz|2
-cheese|110|7|slice|1
-butter|100|0|tbsp|1
-ghee|110|0|tbsp|1
-protein shake|250|30|each|1
-protein powder|120|24|scoop|1
-whey|120|24|scoop|1
-casein|120|24|scoop|1
-mass gainer|650|50|each|1
-protein bar|220|20|each|1
-quest bar|190|21|each|1
-clif bar|250|9|each|1
-rx bar|210|12|each|1
-protein cookie|350|16|each|1
-protein oatmeal|350|30|cup|1
-protein pancakes|220|20|each|3
-protein ice cream|280|20|each|1
-collagen|35|9|scoop|1
-greens powder|40|2|scoop|1
-pre workout|10|0|scoop|1
-creatine|0|0|scoop|1
-cilantro lime rice|210|4|cup|1
-jasmine rice|205|4.3|cup|1
-basmati rice|210|4.4|cup|1
-brown rice|216|5|cup|1
-white rice|205|4.3|cup|1
-fried rice|340|9|cup|1
-rice|205|4.3|cup|1
-quinoa|220|8|cup|1
-couscous|176|6|cup|1
-barley|190|3.5|cup|1
-farro|200|7|cup|1
-spaghetti and meatballs|700|35|each|1
-chicken alfredo|900|45|each|1
-chicken parmesan|700|50|each|1
-mac and cheese|350|12|cup|1
-spaghetti|220|8|cup|1
-lasagna|400|25|each|1
-ravioli|350|15|cup|1
-gnocchi|250|6|cup|1
-penne|220|8|cup|1
-macaroni|220|8|cup|1
-lo mein|400|12|cup|1
-pad thai|700|25|each|1
-pasta|220|8|cup|1
-noodles|220|8|cup|1
-ramen|380|10|each|1
-pho|450|30|each|1
-overnight oats|350|15|cup|1
-oatmeal|160|6|cup|1
-oats|160|6|cup|1
-grits|180|4|cup|1
-cream of wheat|130|4|cup|1
-cereal|180|4|cup|1
-granola|300|9|cup|0.5
-bagel|280|11|each|1
-english muffin|130|5|each|1
-croissant|270|6|each|1
-biscuit|200|4|each|1
-cornbread|190|4|each|1
-muffin|400|6|each|1
-sourdough|90|3|slice|2
-wheat bread|80|4|slice|2
-white bread|80|3|slice|2
-toast|80|3|slice|2
-bread|80|3|slice|2
-corn tortilla|60|1.5|each|2
-tortilla|140|4|each|2
-pita|165|6|each|1
-naan|260|9|each|1
-roll|130|4|each|1
-bun|150|5|each|1
-crackers|130|2|oz|1
-pretzels|110|3|oz|1
-rice cake|35|0.7|each|2
-popcorn|30|1|cup|3
-tortilla chips|140|2|oz|1
-potato chips|155|2|oz|1
-pita chips|130|3|oz|1
-chips|150|2|oz|1
-sweet potato fries|300|3|each|1
-mashed potatoes|240|4|cup|1
-baked potato|160|4|each|1
-sweet potato|180|4|each|1
-tater tots|250|3|cup|1
-hash browns|200|2|cup|1
-french fries|380|4|each|1
-fries|380|4|each|1
-potato|160|4|each|1
-refried beans|220|12|cup|1
-black beans|227|15|cup|1
-pinto beans|245|15|cup|1
-kidney beans|225|15|cup|1
-green beans|35|2|cup|1
-chickpeas|270|15|cup|1
-garbanzo|270|15|cup|1
-lentils|230|18|cup|1
-edamame|190|18|cup|1
-beans|227|15|cup|1
-tofu|180|20|cup|1
-tempeh|320|34|cup|1
-seitan|100|21|oz|3
-falafel|330|13|each|1
-peanut butter|95|3.5|tbsp|2
-almond butter|98|3.4|tbsp|2
-sunflower seeds|165|5.5|oz|1
-pumpkin seeds|160|8.5|oz|1
-chia seeds|60|2|tbsp|1
-flax seeds|55|2|tbsp|1
-hemp seeds|90|5|tbsp|1
-pistachios|160|6|oz|1
-macadamia|200|2|oz|1
-cashews|155|5|oz|1
-walnuts|185|4.3|oz|1
-almonds|165|6|oz|1
-peanuts|160|7|oz|1
-pecans|195|2.6|oz|1
-mixed nuts|170|5|oz|1
-trail mix|140|4|oz|1
-guacamole|50|0.6|serving|2
-guac|50|0.6|serving|2
-avocado|240|3|each|1
-olive oil|120|0|tbsp|1
-coconut oil|120|0|tbsp|1
-vegetable oil|120|0|tbsp|1
-olives|25|0.2|oz|1
-blackberries|62|2|cup|1
-strawberries|50|1|cup|1
-blueberries|85|1.1|cup|1
-raspberries|65|1.5|cup|1
-berries|60|1|cup|1
-pineapple|82|0.9|cup|1
-watermelon|46|0.9|cup|1
-cantaloupe|54|1.3|cup|1
-pomegranate|235|5|each|1
-grapefruit|52|1|each|1
-applesauce|100|0.4|cup|1
-dried mango|130|0.5|oz|1
-cherries|90|1.5|cup|1
-banana|105|1.3|each|1
-orange juice|110|2|cup|1
-apple juice|115|0.2|cup|1
-apple|95|0.5|each|1
-orange|65|1.2|each|1
-grapes|105|1.1|cup|1
-mango|100|1.4|cup|1
-peach|60|1.4|each|1
-pear|100|0.6|each|1
-plum|30|0.5|each|1
-kiwi|42|0.8|each|1
-raisins|130|1.3|oz|1
-dates|66|0.4|each|3
-fruit|80|1|each|1
-brussels sprouts|56|4|cup|1
-cauliflower|27|2|cup|1
-asparagus|27|3|cup|1
-mushrooms|21|3|cup|1
-bell pepper|30|1|each|1
-salad greens|10|1|cup|2
-broccoli|55|3.7|cup|1
-zucchini|20|1.5|cup|1
-cucumber|16|0.7|cup|1
-eggplant|35|1|cup|1
-spinach|7|0.9|cup|2
-lettuce|8|0.6|cup|2
-arugula|5|0.5|cup|2
-carrots|52|1.2|cup|1
-cabbage|22|1|cup|1
-celery|16|0.7|cup|1
-tomato|22|1.1|each|1
-squash|40|1|cup|1
-onion|44|1.2|cup|0.5
-peas|118|8|cup|1
-kale|33|2.9|cup|1
-corn|130|5|cup|1
-vegetables|50|2|cup|1
-veggies|50|2|cup|1
-caesar dressing|80|0.5|tbsp|2
-vinaigrette|60|0|tbsp|2
-pico de gallo|8|0.4|tbsp|2
-maple syrup|52|0|tbsp|2
-bbq sauce|30|0|tbsp|1
-soy sauce|8|1|tbsp|1
-hot sauce|1|0|tbsp|1
-sriracha|5|0|tbsp|1
-marinara|140|6|cup|0.5
-dressing|70|0.3|tbsp|2
-alfredo|200|5|serving|1
-ketchup|20|0|tbsp|1
-mustard|3|0|tbsp|1
-nutella|100|1|tbsp|1
-hummus|25|1.2|tbsp|2
-salsa|10|0.5|tbsp|2
-honey|64|0|tbsp|1
-gravy|25|0.5|tbsp|2
-pesto|80|2|tbsp|1
-ranch|73|0.4|tbsp|2
-jelly|50|0|tbsp|1
-mayo|94|0|tbsp|1
-jam|50|0|tbsp|1
-chipotle chicken bowl|800|45|each|1
-chipotle steak bowl|850|42|each|1
-chipotle burrito|1050|45|each|1
-chipotle bowl|800|45|each|1
-burrito bowl|800|45|each|1
-breakfast burrito|600|25|each|1
-chicken burrito|1000|45|each|1
-steak burrito|1050|42|each|1
-chicken bowl|800|50|each|1
-steak bowl|850|42|each|1
-chipotle|800|45|each|1
-burrito|1000|40|each|1
-chicken quesadilla|600|35|each|1
-quesadilla|550|25|each|1
-chimichanga|700|25|each|1
-enchilada|320|17|each|2
-fajitas|600|40|each|1
-nachos|700|25|each|1
-tamale|285|10|each|2
-chicken tacos|220|13|each|3
-steak tacos|230|13|each|3
-fish tacos|250|12|each|3
-taco|200|9|each|3
-double cheeseburger|750|40|each|1
-bacon cheeseburger|700|35|each|1
-five guys burger|840|47|each|1
-quarter pounder|520|30|each|1
-cheeseburger|550|28|each|1
-hamburger|450|25|each|1
-big mac|590|25|each|1
-whopper|660|28|each|1
-mcdouble|400|22|each|1
-mcchicken|400|14|each|1
-burger|450|25|each|1
-spicy chicken sandwich|550|32|each|1
-grilled chicken sandwich|380|28|each|1
-chick fil a sandwich|440|28|each|1
-chicken sandwich|500|30|each|1
-breakfast sandwich|450|20|each|1
-turkey sandwich|450|28|each|1
-club sandwich|600|35|each|1
-ham sandwich|400|22|each|1
-egg sandwich|400|20|each|1
-grilled cheese|450|17|each|1
-philly cheesesteak|750|40|each|1
-cheesesteak|750|40|each|1
-meatball sub|700|32|each|1
-italian sub|750|35|each|1
-sandwich|400|20|each|1
-footlong|900|45|each|1
-hoagie|700|35|each|1
-blt|480|18|each|1
-sub|600|30|each|1
-chicken wrap|500|30|each|1
-avocado toast|300|8|each|1
-shawarma|650|40|each|1
-wrap|450|25|each|1
-gyro|600|30|each|1
-pepperoni pizza|300|13|slice|2
-personal pizza|700|30|each|1
-cheese pizza|270|11|slice|2
-stromboli|750|35|each|1
-calzone|800|38|each|1
-pizza|285|12|slice|2
-mozzarella sticks|90|4|each|4
-onion rings|400|5|each|1
-wings|72|6.7|each|6
-sweet and sour chicken|450|20|each|1
-kung pao chicken|290|25|each|1
-beef and broccoli|350|30|each|1
-sesame chicken|450|22|each|1
-teriyaki chicken|400|35|each|1
-orange chicken|490|25|each|1
-general tso|430|20|each|1
-panda express|800|35|each|1
-potstickers|60|3|each|6
-dumplings|60|3|each|6
-spring roll|100|3|each|2
-egg roll|220|7|each|1
-sushi roll|300|9|each|2
-sushi|300|9|roll|2
-tikka masala|550|35|each|1
-butter chicken|550|32|each|1
-biryani|600|25|cup|1
-bibimbap|600|28|each|1
-korean bbq|700|50|each|1
-curry|500|25|each|1
-chicken caesar salad|560|45|each|1
-caesar salad|400|12|each|1
-chicken salad|450|35|each|1
-greek salad|350|10|each|1
-cobb salad|550|35|each|1
-chef salad|450|30|each|1
-tuna salad|380|25|each|1
-egg salad|350|12|each|1
-side salad|80|2|each|1
-salad|250|8|each|1
-chicken noodle soup|150|12|cup|1
-clam chowder|250|8|cup|1
-tomato soup|160|4|cup|1
-soup|180|8|cup|1
-chili|280|20|cup|1
-chicken and waffles|850|40|each|1
-chicken and rice|650|50|each|1
-steak and eggs|700|55|each|1
-shepherds pie|450|25|each|1
-casserole|400|25|cup|1
-stir fry|450|30|each|1
-french toast|150|5|slice|2
-protein pancake|220|20|each|3
-pancakes|175|5|each|3
-pancake|175|5|each|3
-waffle|220|6|each|2
-crepe|130|4|each|2
-cinnamon roll|380|6|each|1
-poptart|200|2|each|2
-danish|300|5|each|1
-scone|400|7|each|1
-donut|250|3|each|1
-acai bowl|500|8|each|1
-smoothie|300|8|each|1
-parfait|300|12|each|1
-milkshake|550|12|each|1
-cheesecake|400|7|slice|1
-ice cream|275|5|cup|1
-brownie|240|3|each|1
-apple pie|300|2|slice|1
-cookie|160|2|each|2
-cake|350|4|slice|1
-pie|320|3|slice|1
-granola bar|190|4|each|1
-fruit snacks|80|0|each|1
-candy bar|250|4|each|1
-gummy bears|140|2|oz|1
-marshmallow|25|0.2|each|4
-chocolate|155|2|oz|1
-snickers|250|4|each|1
-skittles|160|0|oz|1
-pudding|150|2|each|1
-jello|70|1|each|1
-frappuccino|400|5|each|1
-iced coffee|100|3|each|1
-black coffee|5|0|each|1
-cappuccino|120|8|each|1
-cold brew|5|0|each|1
-espresso|5|0|each|1
-green tea|2|0|each|1
-latte|190|10|each|1
-coffee|5|0|each|1
-diet soda|0|0|each|1
-energy drink|160|0|each|1
-red bull|110|0|each|1
-gatorade|140|0|each|1
-powerade|130|0|each|1
-kombucha|60|0|each|1
-lemonade|120|0|cup|1
-celsius|10|0|each|1
-monster|210|0|each|1
-soda|150|0|each|1
-coke|140|0|each|1
-juice|115|1|cup|1
-water|0|0|each|1
-light beer|100|0.7|each|1
-white claw|100|0|each|1
-margarita|250|0|each|1
-red wine|125|0|glass|1
-white wine|120|0|glass|1
-seltzer|100|0|each|1
-cocktail|200|0|each|1
-whiskey|105|0|each|1
-tequila|97|0|each|1
-vodka|97|0|each|1
-beer|150|1.6|each|1
-wine|125|0|glass|1
-ipa|200|2|each|1
-`;
-const FOODS=FOOD_TABLE.trim().split('\n').map(r=>{
-  const [n,k,p,u,d]=r.split('|');
-  return {n, k:+k, p:+p, u, d:+d};
-}).sort((a,b)=>b.n.length-a.n.length);
-
-const NUMWORD={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,
-  nine:9,ten:10,twelve:12,dozen:12,half:0.5,couple:2};
-
-function qtyFor(chunk,f){
-  let m=chunk.match(/(\d+(?:\.\d+)?)\s*(oz|ounces?|lbs?|pounds?|cups?|slices?|scoops?|tbsp|tablespoons?|servings?|rolls?|glass(?:es)?|links?)?/);
-  let n=null, unit=null;
-  if(m){ n=parseFloat(m[1]); unit=m[2]||null; }
-  else {
-    const w=chunk.match(/\b(a|an|one|two|three|four|five|six|seven|eight|nine|ten|twelve|dozen|half|couple)\b/);
-    if(w) n=NUMWORD[w[1]];
-  }
-  if(n==null) return f.d;
-  if(unit && /^(lbs?|pounds?)$/.test(unit)) return f.u==='oz' ? n*16 : n;
-  return n;
-}
-
-function findFood(chunk){
-  for(const f of FOODS) if(chunk.includes(f.n)) return f;
-  return null;
-}
-
-function localEstimate(text){
-  const chunks=text.toLowerCase()
-    .replace(/\band\b|\bwith\b|\bplus\b|\balso\b|\+/g,',')
-    .split(/[,;\n]/).map(x=>x.trim()).filter(Boolean);
-  let cal=0,pro=0; const hit=[],miss=[];
-  chunks.forEach(ch=>{
-    const f=findFood(ch);
-    if(!f){ if(ch.length>2) miss.push(ch); return }
-    const q=qtyFor(ch,f);
-    cal+=f.k*q; pro+=f.p*q;
-    const qs=(Math.round(q*10)/10);
-    hit.push((f.u==='each'?(qs>1?qs+' ':''):qs+' '+f.u+' ')+f.n);
-  });
-  return {cal:Math.round(cal/10)*10, pro:Math.round(pro), hit, miss};
-}
-
-function aiMsg(text,cls){
-  const el=$('#aiMsg');
-  el.className='aimsg'+(cls?' '+cls:'');
-  el.textContent=text||'';
-  el.classList.toggle('hide',!text);
-}
-
-function runLocal(){
-  const txt=$('#aiTxt').value.trim();
-  if(!txt){ $('#aiTxt').focus(); return }
-  const r=localEstimate(txt);
-  if(!r.hit.length){
-    aiMsg('Did not recognize any of that. Type the numbers in below.','err');
-    return;
-  }
-  $('#mCal').value=r.cal;
-  $('#mPro').value=r.pro;
-  $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-  $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-  let msg=r.hit.join(' · ');
-  if(r.miss.length) msg+='  —  not recognized: '+r.miss.join(', ')+'. Adjust below.';
-  aiMsg(msg, r.miss.length?'':'ok');
-}
-
-$('#aiGo').onclick=runLocal;
-
-/* voice: Web Speech where supported; iOS also has the keyboard mic key */
-(function(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR) return;
-  const btn=$('#micBtn');
-  btn.innerHTML=ICO_MIC;
-  btn.classList.remove('hide');
-  let rec=null, on=false;
-  btn.onclick=()=>{
-    if(on){ try{ rec.stop() }catch(e){} return }
-    rec=new SR();
-    rec.lang='en-US'; rec.interimResults=true; rec.continuous=false;
-    const base=$('#aiTxt').value.trim();
-    rec.onstart=()=>{ on=true; btn.classList.add('rec'); aiMsg('Listening…') };
-    rec.onresult=e=>{
-      let t='';
-      for(let i=0;i<e.results.length;i++) t+=e.results[i][0].transcript;
-      $('#aiTxt').value=(base?base+' ':'')+t;
-    };
-    rec.onerror=()=>{ aiMsg('Could not hear that. Try the mic key on your keyboard.','err') };
-    rec.onend=()=>{ on=false; btn.classList.remove('rec'); if($('#aiMsg').textContent==='Listening…') aiMsg('') };
-    try{ rec.start() }catch(e){ aiMsg('Voice input is unavailable here.','err') }
-  };
-})();
-
-/* meal */
-pills($('#mCalP'),[400,600,800,1000],v=>$('#mCal').value=v);
-pills($('#mProP'),[25,40,50,60],v=>$('#mPro').value=v,v=>v+'g');
-function openMeal(){
-  $('#mCal').value=''; $('#mPro').value='';
-  $('#mCalP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-  $('#mProP').querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
-  $('#aiTxt').value=''; aiMsg('');
-
-  show('#shMeal');
-  setTimeout(()=>$('#aiTxt').focus(),240);
-}
-$('#mSave').onclick=()=>{
-  const c=+$('#mCal').value||0, p=+$('#mPro').value||0;
-  closeSheet();
-  if(!c&&!p) return;
-  const k=VIEW, id='e'+Date.now();
-  day(k).e.push({id,c,p});
-  save(); render();
-  toast('Added · '+nf(c)+' cal · '+nf(p)+'g', ()=>{ day(k).e=day(k).e.filter(x=>x.id!==id) });
-};
-
 /* weight */
 function openWeight(){
-  const d=V();
-  const prev=lastWeight(VIEW);
+  const d=V(), prev=lastWeight(VIEW);
   const v = d.weight!=null ? d.weight : (prev!=null?prev:S.settings.startWeight);
   $('#wVal').value=(+v).toFixed(1);
   $('#wHint').textContent = d.weight!=null ? 'Logged' : (prev!=null?'Last logged '+prev.toFixed(1)+' lb':'First entry');
@@ -1267,55 +462,49 @@ $('#wSave').onclick=()=>{
 };
 
 /* sleep */
-pills($('#sPills'),[7,7.5,8,8.5,9],v=>$('#sVal').value=v,v=>v+'h');
-pills($('#sScoreP'),[70,80,85,90],v=>$('#sScore').value=v);
+const sp=$('#sPills');
+sp.innerHTML=[7,7.5,8,8.5,9].map(v=>`<button class="pill" data-v="${v}">${v}h</button>`).join('');
+sp.querySelectorAll('.pill').forEach(b=>b.onclick=()=>{
+  sp.querySelectorAll('.pill').forEach(x=>x.classList.toggle('on',x===b));
+  $('#sVal').value=b.dataset.v;
+});
 function openSleep(){
   const d=V();
   $('#sVal').value=d.sleep!=null?d.sleep:'';
-  $('#sScore').value=d.score!=null?d.score:'';
-  markPill($('#sPills'),d.sleep);
-  markPill($('#sScoreP'),d.score);
+  sp.querySelectorAll('.pill').forEach(b=>b.classList.toggle('on',+b.dataset.v===+d.sleep));
   show('#shSleep');
 }
 $('#sSave').onclick=()=>{
-  const d=V(), v=+$('#sVal').value, sc=+$('#sScore').value;
-  if(v>0) d.sleep=v;
-  if(sc>0) d.score=Math.round(sc); else if($('#sScore').value==='') delete d.score;
+  const v=+$('#sVal').value;
+  if(v>0) V().sleep=v;
   save(); closeSheet(); render();
 };
 
 /* ================= weekly ================= */
 function openWeek(){
   const s=S.settings;
-  let calHit=0,proHit=0,watHit=0,supTot=0,supDone=0,slSum=0,slN=0,scSum=0,scN=0;
-  let strip='';
+  let watHit=0,supTot=0,supDone=0,slSum=0,slN=0,strip='';
   for(let i=6;i>=0;i--){
-    const k=backDays(i), d=S.days[k];
-    const dt=asDate(k);
-    const sc=d?score(d):{n:0,t:6};
+    const k=backDays(i), d=S.days[k], dt=asDate(k);
+    const sc=d?score(d):{n:0,t:4};
     const cls=!d?'':sc.n===sc.t?'f':sc.n>0?'p':'';
     strip+=`<div class="hd"><div class="dl">${dt.toLocaleDateString(undefined,{weekday:'narrow'})}</div>
       <button class="db ${cls} ${i===0?'t':''}" data-a="goto" data-k="${k}">${d?sc.n:'·'}</button></div>`;
     if(!d) continue;
-    if(cals(d)>=s.cal*0.95) calHit++;
-    if(pros(d)>=s.pro) proHit++;
+    d.supps=d.supps||{};
     if(waterDone(d)) watHit++;
     if(d.sleep!=null){ slSum+=+d.sleep; slN++ }
-    if(d.score!=null){ scSum+=+d.score; scN++ }
     supTot+=s.supps.length;
     supDone+=s.supps.filter(x=>d.supps[x.id]).length;
   }
   const a7=avg(weights(0,7)), a14=avg(weights(7,7)), t=trend();
   const row=(l,v)=>`<div class="wk"><span>${l}</span><b>${v}</b></div>`;
-  let h=`<div class="lbl">Fundamentals by day — tap to open</div><div class="hist">${strip}</div>`;
-  h+=row('Average weight', a7!=null?a7.toFixed(1)+' lb':'—');
-  h+=row('Weight change', (a7!=null&&a14!=null)?((a7-a14>=0?'+':'')+(a7-a14).toFixed(2)+' lb/wk'):'—');
-  h+=row('Average sleep', slN?(slSum/slN).toFixed(1)+' h':'—');
-  h+=row('Average sleep score', scN?Math.round(scSum/scN)+' / '+s.sleepScore:'—');
-  h+=row('Calorie goal hit', calHit+' / 7 days');
-  h+=row('Protein goal hit', proHit+' / 7 days');
+  let h=`<div class="lbl">Done per day, tap to open</div><div class="hist">${strip}</div>`;
+  h+=row('Average weight', a7!=null?a7.toFixed(1)+' lb':'-');
+  h+=row('Weight change', (a7!=null&&a14!=null)?((a7-a14>=0?'+':'')+(a7-a14).toFixed(2)+' lb/wk'):'-');
+  h+=row('Average sleep', slN?(slSum/slN).toFixed(1)+' h':'-');
   h+=row('Water goal hit', watHit+' / 7 days');
-  h+=row('Supplement adherence', supTot?Math.round(supDone/supTot*100)+'%':'—');
+  h+=row('Supplements taken', supTot?Math.round(supDone/supTot*100)+'%':'-');
   h+=`<div class="verdict">${advice(t)}</div>`;
   $('#weekBody').innerHTML=h;
   S.weekSeen=TODAY(); save(); render();
@@ -1328,28 +517,15 @@ function drawSet(){
   const s=S.settings;
   const num=(k,l,st)=>`<div class="row"><span>${l}</span><input type="number" inputmode="decimal" step="${st||1}" data-k="${k}" value="${s[k]}"></div>`;
   let h='';
-  h+=`<div class="sect">Nutrition</div>`;
-  h+=num('cal','Daily calories');
-  h+=num('pro','Daily protein (g)');
+  h+=`<div class="sect">Goals</div>`;
+  h+=num('water','Water (oz)');
+  h+=num('cup','Ounces per glass');
+  h+=num('sleepMin','Sleep (h)','0.25');
 
-  h+=`<div class="sect">Water</div>`;
-  h+=num('water','Daily goal (oz)');
-  h+=num('cup','Ounces per tap');
-  h+=`<div class="row"><span>Glasses shown</span><b>${cupsTotal()}</b></div>`;
-
-  h+=`<div class="sect">Sleep</div>`;
-  h+=num('sleep','Duration goal (h)','0.25');
-  h+=num('sleepMin','Minimum acceptable (h)','0.25');
-  h+=num('sleepScore','Apple Watch score goal');
-
-  h+=`<div class="sect">Body</div>`;
-  const lw=lastWeight(shift(TODAY(),1));
-  h+=`<div class="row"><span>Height</span><input type="text" data-t="height" value="${esc(s.height)}"></div>`;
-  h+=`<div class="row"><span>Current weight</span><b>${lw!=null?lw.toFixed(1)+' lb':s.startWeight+' lb'}</b></div>`;
-  h+=num('startWeight','Starting weight (lb)','0.5');
-  h+=num('gainMin','Gain min (lb/wk)','0.05');
-  h+=num('gainMax','Gain max (lb/wk)','0.05');
-  h+=num('gainCut','Cut back above (lb/wk)','0.05');
+  h+=`<div class="sect">Weight gain target</div>`;
+  h+=num('gainMin','Min (lb/wk)','0.05');
+  h+=num('gainMax','Max (lb/wk)','0.05');
+  h+=num('gainCut','Too fast above (lb/wk)','0.05');
 
   h+=`<div class="sect">Supplements</div>`;
   s.supps.forEach(x=>{ h+=`<div class="erow"><b>${esc(x.n)}</b><button class="del" data-ds="${x.id}">×</button></div>` });
@@ -1364,9 +540,6 @@ function drawSet(){
 
   $('#setBody').querySelectorAll('input[data-k]').forEach(i=>{
     i.onchange=()=>{ const v=+i.value; if(!isNaN(v)&&v>0){ S.settings[i.dataset.k]=v; save(); drawSet(); render() } };
-  });
-  $('#setBody').querySelectorAll('input[data-t]').forEach(i=>{
-    i.onchange=()=>{ S.settings[i.dataset.t]=i.value.trim(); save() };
   });
   $('#setBody').querySelectorAll('[data-ds]').forEach(b=>b.onclick=()=>{
     S.settings.supps=S.settings.supps.filter(x=>x.id!==b.dataset.ds); save(); drawSet(); render();
@@ -1398,8 +571,7 @@ function drawSet(){
 app.addEventListener('click',e=>{
   const el=e.target.closest('[data-a]'); if(!el) return;
   const a=el.dataset.a, d=V();
-  if(a==='meal') openMeal();
-  else if(a==='weight') openWeight();
+  if(a==='weight') openWeight();
   else if(a==='sleep') openSleep();
   else if(a==='week') openWeek();
   else if(a==='today'){ VIEW=TODAY(); render(); window.scrollTo(0,0) }
@@ -1414,12 +586,6 @@ app.addEventListener('click',e=>{
     S.settings.supps.forEach(x=>d.supps[x.id]=true);
     save(); render();
     toast('All taken', ()=>{ day(k).supps=before });
-  }
-  else if(a==='rm'){
-    const k=VIEW, id=el.dataset.id, item=day(k).e.find(x=>x.id===id);
-    day(k).e=day(k).e.filter(x=>x.id!==id);
-    save(); render();
-    toast('Removed', ()=>{ day(k).e.push(item) });
   }
 });
 $('#prev').onclick=()=>{ VIEW=shift(VIEW,-1); render(); window.scrollTo(0,0) };
