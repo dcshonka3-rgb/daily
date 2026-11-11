@@ -182,6 +182,19 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .wk:last-of-type{border:0}
 .wk span{color:var(--mu);font-weight:600}
 .wk b{font-weight:700;white-space:nowrap}
+/* trends */
+.tg{margin:10px 0 6px}
+.tg h3{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.3px;margin:16px 0 4px}
+.tg h3 i{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.tg.good h3{color:var(--blue)} .tg.good h3 i{background:var(--blue)}
+.tg.imp h3{color:var(--or)} .tg.imp h3 i{background:var(--or)}
+.tg.miss h3{color:#ff8a8a} .tg.miss h3 i{background:#ff8a8a}
+.tr2{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.tr2:last-child{border:0}
+.tr2 span{color:var(--tx);font-weight:600;min-width:0}
+.tr2 span small{display:block;color:var(--mu2);font-size:12px;font-weight:600;margin-top:2px}
+.tr2 b{font-weight:700;color:var(--mu);white-space:nowrap}
+.tnote{font-size:13.5px;color:var(--mu);line-height:1.5;padding:12px 14px;border-radius:12px;background:var(--card2);margin-top:10px}
 .verdict{background:var(--or-w);border:1px solid rgba(255,138,60,.28);border-radius:13px;padding:15px;margin-top:18px;font-size:15px;line-height:1.5;font-weight:600;color:var(--tx)}
 
 /* toast */
@@ -596,12 +609,72 @@ function openWeek(){
   show('#shWeek');
 }
 
+/* ================= trends ================= */
+const hasData=d=>!!d&&(d.weight!=null||d.sleep!=null||(+d.cups||0)>0||Object.values(d.supps||{}).some(Boolean)||Object.values(d.habits||{}).some(Boolean));
+function trendItems(){
+  const s=S.settings;
+  const items=[
+    {n:'Weigh in', f:d=>d.weight!=null},
+    {n:'Sleep '+s.sleepMin+'+ hours', f:d=>(+d.sleep||0)>=s.sleepMin},
+    {n:'Water goal', f:d=>waterDone(d)},
+    {n:'All supplements', f:d=>suppsDone(d)}
+  ];
+  s.habits.forEach(h=>items.push({n:h.n, f:d=>!!(d.habits||{})[h.id]}));
+  return items;
+}
+function trendWindow(from){ // 7 days ending yesterday (from=1) or the week before (from=8)
+  const keys=[]; for(let i=from;i<from+7;i++) keys.push(backDays(i)); return keys;
+}
+function trendsReport(){
+  let first=null;
+  for(let i=1;i<=7;i++){ if(hasData(S.days[backDays(i)])) first=i; }
+  const span=first||0;              // days from first logged day through yesterday
+  const tracked=trendWindow(1).filter(k=>hasData(S.days[k])).length;
+  if(span<3) return {span, tracked, ready:false};
+  const cur=trendWindow(1).slice(0,span), prev=trendWindow(8);
+  const prevHas=prev.some(k=>hasData(S.days[k]));
+  const out={span, tracked, ready:true, good:[], imp:[], miss:[]};
+  trendItems().forEach(it=>{
+    const n=cur.filter(k=>S.days[k]&&it.f(S.days[k])).length;
+    const p=prevHas? prev.filter(k=>S.days[k]&&it.f(S.days[k])).length : null;
+    let streak=0; for(let i=1;i<=60;i++){ const d=S.days[backDays(i)]; if(d&&it.f(d)) streak++; else break; }
+    const r=n/span, row={n:it.n, done:n, of:span, prev:p, streak, r};
+    (r>=0.8?out.good: r>=0.3?out.imp: out.miss).push(row);
+  });
+  out.good.sort((a,b)=>b.r-a.r||b.streak-a.streak);
+  out.imp.sort((a,b)=>a.r-b.r);
+  out.miss.sort((a,b)=>a.r-b.r);
+  return out;
+}
+function trendsHTML(){
+  const t=trendsReport();
+  let h=`<div class="sect">Trends, last ${t.ready?t.span:7} days</div>`;
+  if(!t.ready){
+    h+=`<div class="tnote">Trends need at least 3 days of logging before today. This copy of the app has <b>${t.tracked}</b> so far. Keep logging and this fills in.<br><br>Data is saved on this phone only, so if you added the app to your Home Screen again, use Import backup below to bring your history over.</div>`;
+    return h;
+  }
+  const sub=x=>{
+    const bits=[];
+    if(x.streak>=2) bits.push(x.streak+' day streak');
+    if(x.prev!=null){ const pr=Math.round(x.prev/7*x.of); if(x.done>pr) bits.push('up from '+pr); else if(x.done<pr) bits.push('down from '+pr); }
+    return bits.length?`<small>${bits.join(' · ')}</small>`:'';
+  };
+  const grp=(cls,title,arr,empty)=>`<div class="tg ${cls}"><h3><i></i>${title}</h3>`+
+    (arr.length? arr.map(x=>`<div class="tr2"><span>${esc(x.n)}${sub(x)}</span><b>${x.done} / ${x.of}</b></div>`).join('') : `<div class="tr2"><span style="color:var(--mu2)">${empty}</span></div>`)+`</div>`;
+  h+=grp('good','Doing well',t.good,'Nothing above 80% yet');
+  h+=grp('imp','Get more consistent',t.imp,'Nothing in the middle');
+  h+=grp('miss','Missing',t.miss,'Nothing being skipped');
+  const focus=(t.miss[0]||t.imp[0]);
+  if(focus) h+=`<div class="tnote">Focus this week: <b>${esc(focus.n)}</b>. You hit it ${focus.done} of the last ${focus.of} days.</div>`;
+  return h;
+}
+
 /* ================= settings ================= */
 function openSet(){ drawSet(); show('#shSet') }
 function drawSet(){
   const s=S.settings;
   const num=(k,l,st)=>`<div class="row"><span>${l}</span><input type="number" inputmode="decimal" step="${st||1}" data-k="${k}" value="${s[k]}"></div>`;
-  let h='';
+  let h=trendsHTML();
   h+=`<div class="sect">Goals</div>`;
   h+=num('water','Water (oz)');
   h+=num('cup','Ounces per glass');
