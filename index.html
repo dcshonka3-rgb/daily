@@ -104,10 +104,9 @@ header{display:flex;align-items:center;gap:2px;padding:calc(16px + env(safe-area
 .hab{display:flex;align-items:center;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600;color:var(--tx);text-align:left;width:100%}
 .hab:last-child{border-bottom:0;padding-bottom:2px}
 .hab .box{width:21px;height:21px}
-.hab span{position:relative;flex:1;min-width:0;transition:color .3s}
-.hab span::after{content:'';position:absolute;left:0;top:52%;height:1.5px;width:0;background:currentColor;transition:width .35s cubic-bezier(.22,1,.36,1)}
-.hab.on span{color:var(--mu2)}
-.hab.on span::after{width:100%}
+.hab span{flex:1;min-width:0}
+.hab em{font-style:normal;transition:color .3s;background:linear-gradient(currentColor,currentColor) 0 58%/0% 1.5px no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size .35s cubic-bezier(.22,1,.36,1),color .3s}
+.hab.on em{color:var(--mu2);background-size:100% 1.5px}
 .hab.on .box{background:var(--blue);border-color:var(--blue)}
 .hab.on .box svg{opacity:1}
 .hab.pop .box{animation:pop .5s var(--spring)}
@@ -459,7 +458,7 @@ function render(){
       </div>
       <div class="hlist">`;
     s.habits.forEach(x=>{
-      h+=`<button class="hab ${d.habits[x.id]?'on':''} ${POP==='h'+x.id?'pop':''}" data-a="hab" data-id="${x.id}"><i class="box">${ICO_CHK}</i><span>${esc(x.n)}</span></button>`;
+      h+=`<button class="hab ${d.habits[x.id]?'on':''} ${POP==='h'+x.id?'pop':''}" data-a="hab" data-id="${x.id}"><i class="box">${ICO_CHK}</i><span><em>${esc(x.n)}</em></span></button>`;
     });
     h+=`</div></div>`;
   }
